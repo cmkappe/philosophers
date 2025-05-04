@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 17:32:34 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/03 19:58:57 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/04 13:27:38 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,15 +66,15 @@ static long	safe_atol(const char *str)
 	return (result);
 }
 
-
-void init_data(int ac, const char **av)
+void	init_data(int ac, const char **av)
 {
 	int		i;
 	t_philo	philo;
 
 	if (!(ac == 5 || ac == 6))
 	{
-		write(2, "Error: Invalid number of arguments. Expected 4 or 5 arguments.\n", 64);
+		write(2, "Error: Invalid number of arguments.", 36);
+		write(2, " Expected 4 or 5 arguments.\n", 29);
 		exit(EXIT_FAILURE);
 	}
 	i = 1;
@@ -91,8 +91,7 @@ void init_data(int ac, const char **av)
 	write(1, "Initialization successful.\n", 27);
 }
 
-
-t_philo init_philo(int ac, const char **av)
+t_philo	init_philo(int ac, const char **av)
 {
 	t_philo	philo;
 
@@ -110,25 +109,3 @@ t_philo init_philo(int ac, const char **av)
 	}
 	return (philo);
 }
-
-
-
-
-/* The first thing we need to do before we even start initializing anything is to 
-check the program input. The program will receive 4 or 5 arguments so the first 
-thing should be to throw an error if we receive more or less. 
-Let’s analyze the input we will receive: 5 800 200 200 7
-
-    5 — The number of philosophers
-    800 — The time a philosopher will die if he doesn’t eat
-    200 — The time it takes a philosopher to eat
-    200 — The time it takes a philosopher to sleep
-    7 — Number of times all the philosophers need to eat before terminating the program **
-
-** optional argument
-
-Basically, all we need to do is to check that the input contains only numbers, 
-they should all be bigger than 0 except the number of meals each philo needs to eat (edge case). 
-In the evaluation form, it says we should not test with more than 200 philos so you can set 
-the limit not to be more than 200. */
-

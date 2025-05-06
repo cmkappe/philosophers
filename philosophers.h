@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:32:57 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/04 15:13:04 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/06 18:44:01 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_philo
 	pthread_mutex_t	*write_lock;
 	pthread_mutex_t	*dead_lock;
 	pthread_mutex_t	*meal_lock;
+	struct s_table	*table;
 }				t_philo;
 
 typedef struct s_table
@@ -50,6 +51,7 @@ typedef struct s_table
 	pthread_mutex_t	dead_lock;
 	pthread_mutex_t	meal_lock;
 	pthread_mutex_t	write_lock;
+	pthread_t		monitor;
 }				t_table;
 
 
@@ -59,5 +61,14 @@ t_philo	init_philo(int ac, const char **av);
 void	init_table_struct(t_table *table);
 void	init_philo_struct(t_philo *philos, pthread_mutex_t *forks,
 			t_table *table, t_philo conf);
+
+int		create_threads(t_philo *philo, t_table *table);
+
+void	*philo_routine(t_philo *philo, t_table *table);
+void	*monitor_routine(t_philo *philo, t_table *table);
+
+/* ****************************  HELPERS  ***************************** */
+size_t	get_time_in_ms(void);
+
 
 #endif

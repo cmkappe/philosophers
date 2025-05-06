@@ -6,27 +6,19 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 14:49:31 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/04 15:24:23 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/06 18:24:13 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philosophers.h"
-
-static size_t	get_time_in_ms(void)
-{
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-}
 
 void	init_philo_struct(t_philo *philos, pthread_mutex_t *forks,
 			t_table *table, t_philo conf)
 {
 	int	i;
 
-	i = 0;
-	while (i < conf.num_of_philos)
+	i = -1;
+	while (++i < conf.num_of_philos)
 	{
 		pthread_mutex_init(&forks[i], NULL);
 		philos[i].id = i + 1;
@@ -46,7 +38,6 @@ void	init_philo_struct(t_philo *philos, pthread_mutex_t *forks,
 		philos[i].l_fork = &forks[i];
 		philos[i].r_fork = &forks[(i + 1) % conf.num_of_philos];
 		philos[i].thread = 0;
-		i++;
 	}
 }
 

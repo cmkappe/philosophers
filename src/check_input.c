@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 17:32:34 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/04 13:49:58 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/06 18:23:49 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ static int	safe_atoi(const char *str)
 		if (str[i] < '0' || str[i] > '9')
 			return (-1);
 		result = result * 10 + (str[i] - '0');
-		if (result > 200)
-			return (-1);
+		// if (result > 200)
+		// 	return (-1);
 		i++;
 	}
 	if (result == 0)
@@ -57,8 +57,8 @@ static long	safe_atol(const char *str)
 		if (str[i] < '0' || str[i] > '9')
 			return (-1);
 		result = result * 10 + (str[i] - '0');
-		if (result < 0)
-			return (-1);
+		// if (result < 0)
+		// 	return (-1);
 		i++;
 	}
 	if (result == 0)
@@ -77,19 +77,23 @@ void	init_data(int ac, const char **av)
 		write(2, " Expected 4 or 5 arguments.\n", 29);
 		exit(EXIT_FAILURE);
 	}
-	i = 1;
-	while (i < ac)
+	if (safe_atoi(av[1]) > 200)
+	{
+		write(2, "Error: Number of philosophers cannot exceed 200.\n", 50);
+		exit(EXIT_FAILURE);
+	}
+	i = 0;
+	while (++i < ac)
 	{
 		if (safe_atol(av[i]) <= 0)
 		{
 			write(2, "Error: All arguments must be positive integers.\n", 49);
 			exit(EXIT_FAILURE);
 		}
-		i++;
 	}
 	philo = init_philo(ac, av);
 	write(1, "Initialization successful.\n", 27);
-}
+ }
 
 t_philo	init_philo(int ac, const char **av)
 {
@@ -102,10 +106,5 @@ t_philo	init_philo(int ac, const char **av)
 	philo.min_meals = -1;
 	if (ac == 6)
 		philo.min_meals = safe_atol(av[5]);
-	if (philo.num_of_philos > 200)
-	{
-		write(2, "Error: Number of philosophers cannot exceed 200.\n", 50);
-		exit(EXIT_FAILURE);
-	}
 	return (philo);
 }

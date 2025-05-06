@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   check_input.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 17:32:34 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/04 13:27:38 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/04 13:49:58 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,14 +95,14 @@ t_philo	init_philo(int ac, const char **av)
 {
 	t_philo	philo;
 
-	philo.num_of_philo = safe_atoi(av[1]);
+	philo.num_of_philos = safe_atoi(av[1]);
 	philo.time_to_die = safe_atol(av[2]);
 	philo.time_to_eat = safe_atol(av[3]);
 	philo.time_to_sleep = safe_atol(av[4]);
 	philo.min_meals = -1;
 	if (ac == 6)
 		philo.min_meals = safe_atol(av[5]);
-	if (philo.num_of_philo > 200)
+	if (philo.num_of_philos > 200)
 	{
 		write(2, "Error: Number of philosophers cannot exceed 200.\n", 50);
 		exit(EXIT_FAILURE);

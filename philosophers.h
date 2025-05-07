@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:32:57 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/06 18:44:01 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/07 15:49:02 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,12 @@ void	init_philo_struct(t_philo *philos, pthread_mutex_t *forks,
 
 int		create_threads(t_philo *philo, t_table *table);
 
-void	*philo_routine(t_philo *philo, t_table *table);
+/* *****************************  SIM  ****************************** */
+void	*philo_routine(void *data);
 void	*monitor_routine(t_philo *philo, t_table *table);
 
 /* ****************************  HELPERS  ***************************** */
-size_t	get_time_in_ms(void);
+size_t	get_current_time(void);
 
 
 #endif

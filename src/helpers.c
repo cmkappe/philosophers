@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:20:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/06 18:05:12 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/07 13:19:43 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,7 @@ int	ft_usleep(size_t milliseconds)
 	return (0);
 } */
 
-// old version 
-
-size_t	get_time_in_ms(void)
-{
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-}
-
-/* // Gets the current time in milliseconds
+// Gets the current time in milliseconds
 
 size_t	get_current_time(void)
 {
@@ -42,4 +32,4 @@ size_t	get_current_time(void)
 	if (gettimeofday(&time, NULL) == -1)
 		write(2, "gettimeofday() error\n", 22);
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
-} */
+}

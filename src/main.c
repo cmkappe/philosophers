@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:32:04 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/06 18:20:26 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/07 17:12:30 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int	main(int ac, const char **av)
 
 	init_data(ac, av);
 	config = init_philo(ac, av);
-	init_philo_struct(philos, forks, &table, config);
 	init_table_struct(&table);
+	init_philo_struct(philos, forks, &table, config);
 	if (!create_threads(philos, &table))
 		return (-1);
 	return (0);

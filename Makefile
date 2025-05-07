@@ -1,6 +1,6 @@
 
 NAME	=	philo
-HEADER	=	philosphers.h
+HEADER	=	philosophers.h
 
 SRC_DIR	=	src
 OBJ_DIR =	src_o

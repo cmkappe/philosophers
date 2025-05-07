@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 14:49:31 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/06 18:24:13 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/07 17:11:40 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	init_philo_struct(t_philo *philos, pthread_mutex_t *forks,
 		philos[i].id = i + 1;
 		philos[i].eating = 0;
 		philos[i].meals_eaten = 0;
-		philos[i].last_meal = get_time_in_ms();
+		philos[i].last_meal = get_current_time();
 		philos[i].start_time = philos[i].last_meal;
 		philos[i].num_of_philos = conf.num_of_philos;
 		philos[i].time_to_die = conf.time_to_die;
@@ -38,6 +38,7 @@ void	init_philo_struct(t_philo *philos, pthread_mutex_t *forks,
 		philos[i].l_fork = &forks[i];
 		philos[i].r_fork = &forks[(i + 1) % conf.num_of_philos];
 		philos[i].thread = 0;
+		philos[i].table = table;
 	}
 }
 

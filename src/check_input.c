@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_input.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 17:32:34 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/06 18:23:49 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/08 17:47:25 by chiarakappe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,23 @@ static long	safe_atol(const char *str)
 	return (result);
 }
 
+t_philo	init_philo(int ac, const char **av)
+{
+	t_philo	philo;
+
+	philo.num_of_philos = safe_atoi(av[1]);
+	philo.time_to_die = safe_atol(av[2]);
+	philo.time_to_eat = safe_atol(av[3]);
+	philo.time_to_sleep = safe_atol(av[4]);
+	philo.min_meals = -1;
+	if (ac == 6)
+		philo.min_meals = safe_atol(av[5]);
+	return (philo);
+}
+
 void	init_data(int ac, const char **av)
 {
 	int		i;
-	t_philo	philo;
 
 	if (!(ac == 5 || ac == 6))
 	{
@@ -91,20 +104,6 @@ void	init_data(int ac, const char **av)
 			exit(EXIT_FAILURE);
 		}
 	}
-	philo = init_philo(ac, av);
 	write(1, "Initialization successful.\n", 27);
  }
 
-t_philo	init_philo(int ac, const char **av)
-{
-	t_philo	philo;
-
-	philo.num_of_philos = safe_atoi(av[1]);
-	philo.time_to_die = safe_atol(av[2]);
-	philo.time_to_eat = safe_atol(av[3]);
-	philo.time_to_sleep = safe_atol(av[4]);
-	philo.min_meals = -1;
-	if (ac == 6)
-		philo.min_meals = safe_atol(av[5]);
-	return (philo);
-}

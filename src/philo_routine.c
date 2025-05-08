@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_routine.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:16:33 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/07 17:29:53 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/08 17:47:59 by chiarakappe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void *philo_routine(void *data)
 	
 	philo = (t_philo *)data;
 	table = philo->table;
+	(void)table;
 	//size_t	cur_time;
 	printf("----------Debug-------------\n");
 	while (1)
@@ -55,6 +56,8 @@ void *philo_routine(void *data)
 	return NULL;
 }
 
+
+// monitor checks if anybody died or everybody ate => sim stop
 
 	// pthread_mutex_lock(&table->meal_lock);
 	// printf ("hello im philo num %d\n", philo->id);

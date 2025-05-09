@@ -3,21 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   philo_routine.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:16:33 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/08 17:47:59 by chiarakappe      ###   ########.fr       */
+/*   Updated: 2025/05/09 17:08:34 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philosophers.h"
 
-static void	print_action(t_philo *philo, const char *action)
-{
-	pthread_mutex_lock(philo->write_lock);
-	printf("[%zu] %d %s\n", get_current_time() - philo->start_time, philo->id, action);
-	pthread_mutex_unlock(philo->write_lock);
-}
+
 
 static void	take_forks(t_philo *philo)
 {
@@ -37,12 +32,24 @@ static void	take_forks(t_philo *philo)
 	
 } */
 
+void	start_eating(t_philo *philo)
+{
+	size_t	used_time;
+
+	// start time - eating time - usleep for the while that they are eating
+
+	// if eating time goes to 0, unlock forks?
+
+	// if sim stops before eating time is over - dead_flag = 1
+	
+}
+
 
 void *philo_routine(void *data)
 {
 	t_table	*table;
 	t_philo	*philo;
-	
+
 	philo = (t_philo *)data;
 	table = philo->table;
 	(void)table;
@@ -51,7 +58,9 @@ void *philo_routine(void *data)
 	while (1)
 	{
 		take_forks(philo);
-	
+		// start_eating(philo);
+		// start_sleeping(philo);
+		// start_thinking(philo);
 	}
 	return NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:32:57 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/07 15:49:02 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/09 16:18:07 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,9 @@ void	*philo_routine(void *data);
 void	*monitor_routine(t_philo *philo, t_table *table);
 
 /* ****************************  HELPERS  ***************************** */
+int		ft_usleep(size_t milliseconds);
 size_t	get_current_time(void);
+void	print_action(t_philo *philo, const char *action);
 
 
 #endif

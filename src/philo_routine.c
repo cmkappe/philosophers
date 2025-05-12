@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:16:33 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/09 17:08:34 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/12 18:36:52 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,21 @@ static void	take_forks(t_philo *philo)
 
 void	start_eating(t_philo *philo)
 {
-	size_t	used_time;
+	pthread_mutex_lock(philo->meal_lock);
+	philo->last_meal = get_current_time();
+	pthread_mutex_unlock(philo->meal_lock);
+
+	print_action(philo, "is eating");
+	ft_usleep(philo->time_to_eat);
+
+	pthread_mutex_lock(philo->meal_lock);
+	philo->meals_eaten++;
+	pthread_mutex_unlock(philo->meal_lock);
+
+	pthread_mutex_unlock(philo->r_fork);
+	print_action(philo, "put down the right fork");
+	pthread_mutex_unlock(philo->l_fork);
+	print_action(philo, "put down the left fork");
 
 	// start time - eating time - usleep for the while that they are eating
 
@@ -58,12 +72,22 @@ void *philo_routine(void *data)
 	while (1)
 	{
 		take_forks(philo);
-		// start_eating(philo);
+		start_eating(philo);
 		// start_sleeping(philo);
 		// start_thinking(philo);
 	}
 	return NULL;
 }
+
+
+// Even-ID Philosophers (P0, P2): Pick up the left fork first, then the right fork.
+// Odd-ID Philosophers (P1, P3): Pick up the right fork first, then the left fork.
+
+// 3.2. Limit Holding Time: in this strategy, you will prevent the deadlock by setting a Time Limit. 
+// If a philosopher can’t get both forks within a certain time, they must release any forks they have and try again later. 
+// This prevents them from waiting forever.
+
+
 
 
 // monitor checks if anybody died or everybody ate => sim stop

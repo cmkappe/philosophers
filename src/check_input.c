@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_input.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 17:32:34 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/08 17:47:25 by chiarakappe      ###   ########.fr       */
+/*   Updated: 2025/05/12 17:49:11 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

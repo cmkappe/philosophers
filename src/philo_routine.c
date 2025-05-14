@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_routine.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:16:33 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/12 18:36:52 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/14 11:16:11 by chiarakappe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,17 @@ void	start_eating(t_philo *philo)
 	
 }
 
+void	start_sleeping(t_philo *philo)
+{
+	ft_usleep(philo->time_to_sleep);
+	print_action(philo, "is sleeping");
+}
+
+void	start_thinking(t_philo *philo)
+{
+	ft_usleep(1000);
+	print_action(philo, "is thinking");
+}
 
 void *philo_routine(void *data)
 {

@@ -3,27 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   philo_routine.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:16:33 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/14 11:16:11 by chiarakappe      ###   ########.fr       */
+/*   Updated: 2025/05/14 15:04:31 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philosophers.h"
 
-
+	// Even-ID Philosophers (P0, P2): Pick up the left fork first, then the right fork.
+	// Odd-ID Philosophers (P1, P3): Pick up the right fork first, then the left fork.
 
 static void	take_forks(t_philo *philo)
 {
-	if (philo->id % 2 == 0)
-		usleep(1000);
-
-	pthread_mutex_lock(philo->l_fork);
-	print_action(philo, "has taken a left fork");
-
-	pthread_mutex_lock(philo->r_fork);
-	print_action(philo, "has taken a right fork");
+	if (philo->num_of_philos % 2 == 0)
+	{
+		pthread_mutex_lock(philo->l_fork);
+		//print_action(philo, "has taken a left fork");
+		print_action(philo, "has taken a fork");
+		pthread_mutex_lock(philo->r_fork);
+		// print_action(philo, "has taken a right fork");
+		print_action(philo, "has taken a fork");
+	}
+	else
+	{
+		pthread_mutex_lock(philo->r_fork);
+		print_action(philo, "has taken a fork");
+		// print_action(philo, "has taken a right fork");
+		pthread_mutex_lock(philo->l_fork);
+		//print_action(philo, "has taken a left fork");
+		print_action(philo, "has taken a fork");
+	}
 }
 
 /* void	unlock_forks(t_philo *philo)
@@ -46,9 +57,11 @@ void	start_eating(t_philo *philo)
 	pthread_mutex_unlock(philo->meal_lock);
 
 	pthread_mutex_unlock(philo->r_fork);
-	print_action(philo, "put down the right fork");
+	// print_action(philo, "put down the right fork");
+	//print_action(philo, "has left a fork");
 	pthread_mutex_unlock(philo->l_fork);
-	print_action(philo, "put down the left fork");
+	//print_action(philo, "has left a fork");
+	// print_action(philo, "put down the left fork");
 
 	// start time - eating time - usleep for the while that they are eating
 
@@ -60,13 +73,12 @@ void	start_eating(t_philo *philo)
 
 void	start_sleeping(t_philo *philo)
 {
-	ft_usleep(philo->time_to_sleep);
 	print_action(philo, "is sleeping");
+	ft_usleep(philo->time_to_sleep);
 }
 
 void	start_thinking(t_philo *philo)
 {
-	ft_usleep(1000);
 	print_action(philo, "is thinking");
 }
 
@@ -79,20 +91,29 @@ void *philo_routine(void *data)
 	table = philo->table;
 	(void)table;
 	//size_t	cur_time;
-	printf("----------Debug-------------\n");
+	//printf("----------Debug-------------\n");
+	//printf("time_to_sleep: %zu\n", philo->time_to_sleep);
+	if (philo->id % 2 == 0)
+		ft_usleep(philo->time_to_eat / 2);
 	while (1)
 	{
 		take_forks(philo);
 		start_eating(philo);
-		// start_sleeping(philo);
-		// start_thinking(philo);
+		if (philo->num_times_to_eat > 0)
+		{
+			philo->num_times_to_eat--;
+			printf("philo id %d num times to eat: %d\n", philo->id, philo->num_times_to_eat);
+			if (philo->num_times_to_eat == 0)
+				break ;
+		}
+		start_sleeping(philo);
+		start_thinking(philo);
 	}
 	return NULL;
 }
 
 
-// Even-ID Philosophers (P0, P2): Pick up the left fork first, then the right fork.
-// Odd-ID Philosophers (P1, P3): Pick up the right fork first, then the left fork.
+
 
 // 3.2. Limit Holding Time: in this strategy, you will prevent the deadlock by setting a Time Limit. 
 // If a philosopher can’t get both forks within a certain time, they must release any forks they have and try again later. 

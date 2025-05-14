@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:20:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/09 16:17:36 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/14 12:30:21 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,6 @@ size_t	get_current_time(void)
 void	print_action(t_philo *philo, const char *action)
 {
 	pthread_mutex_lock(philo->write_lock);
-	printf("[%zu] %d %s\n", get_current_time() - philo->start_time, philo->id, action);
+	printf("%zu %d %s\n", get_current_time() - philo->start_time, philo->id, action);
 	pthread_mutex_unlock(philo->write_lock);
 }

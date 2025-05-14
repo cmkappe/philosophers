@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 17:32:34 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/12 17:49:11 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/14 15:00:50 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,11 @@ t_philo	init_philo(int ac, const char **av)
 	philo.time_to_die = safe_atol(av[2]);
 	philo.time_to_eat = safe_atol(av[3]);
 	philo.time_to_sleep = safe_atol(av[4]);
-	philo.min_meals = -1;
+	//philo.min_meals = -1;
 	if (ac == 6)
 		philo.min_meals = safe_atol(av[5]);
+	else
+		philo.min_meals = -1;
 	return (philo);
 }
 

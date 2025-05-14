@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_routine.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:16:33 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/14 15:04:31 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/14 21:39:51 by chiarakappe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,13 +99,15 @@ void *philo_routine(void *data)
 	{
 		take_forks(philo);
 		start_eating(philo);
-		if (philo->num_times_to_eat > 0)
+		if (!monitor_routine(philo, table))
+			break ;
+/* 		if (philo->num_times_to_eat > 0)
 		{
 			philo->num_times_to_eat--;
 			printf("philo id %d num times to eat: %d\n", philo->id, philo->num_times_to_eat);
 			if (philo->num_times_to_eat == 0)
 				break ;
-		}
+		} */
 		start_sleeping(philo);
 		start_thinking(philo);
 	}

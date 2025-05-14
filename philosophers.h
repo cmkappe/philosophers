@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:32:57 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/09 16:18:07 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/14 22:00:09 by chiarakappe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct s_philo
 
 typedef struct s_table
 {
-	t_philo			*philos;
+	t_philo			philos[200];
 	int				dead_flag;
 	pthread_mutex_t	dead_lock;
 	pthread_mutex_t	meal_lock;
@@ -66,7 +66,7 @@ int		create_threads(t_philo *philo, t_table *table);
 
 /* *****************************  SIM  ****************************** */
 void	*philo_routine(void *data);
-void	*monitor_routine(t_philo *philo, t_table *table);
+void	*monitor_routine(void *data);
 
 /* ****************************  HELPERS  ***************************** */
 int		ft_usleep(size_t milliseconds);

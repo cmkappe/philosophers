@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:32:57 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/14 22:00:09 by chiarakappe      ###   ########.fr       */
+/*   Updated: 2025/05/19 16:36:13 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,13 @@
 typedef struct s_philo
 {
 	pthread_t		thread;
-	size_t			time_to_die;
-	size_t			time_to_eat;
-	size_t			time_to_sleep;
-	size_t			min_meals;
 	size_t			last_meal;
-	size_t			start_time;
-	int				num_of_philos;
 	int				num_times_to_eat;
 	int				id;
 	int				eating;
 	int				meals_eaten;
 	int				*dead;
+	size_t			time_next_meal;
 	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*write_lock;
@@ -47,20 +42,25 @@ typedef struct s_philo
 typedef struct s_table
 {
 	t_philo			philos[200];
-	int				dead_flag;
+	pthread_t		monitor;
 	pthread_mutex_t	dead_lock;
 	pthread_mutex_t	meal_lock;
 	pthread_mutex_t	write_lock;
-	pthread_t		monitor;
+	int				dead_flag;
+	int				num_of_philos;
+	size_t			start_time;
+	size_t			time_to_die;
+	size_t			time_to_eat;
+	size_t			time_to_sleep;
+	size_t			min_meals;
 }				t_table;
 
 
 /* *****************************  INIT  ****************************** */
-void	init_data(int ac, const char **av);
-t_philo	init_philo(int ac, const char **av);
-void	init_table_struct(t_table *table);
-void	init_philo_struct(t_philo *philos, pthread_mutex_t *forks,
-			t_table *table, t_philo conf);
+void	check_input(int ac, const char **av);
+// void	init_args(int ac, const char **av);
+void	init_table(int ac, const char **av, t_table *table);
+void	init_philo(t_philo *philos, pthread_mutex_t *forks, t_table *table);
 
 int		create_threads(t_philo *philo, t_table *table);
 
@@ -68,10 +68,14 @@ int		create_threads(t_philo *philo, t_table *table);
 void	*philo_routine(void *data);
 void	*monitor_routine(void *data);
 
+void	start_eating(t_philo *philo, t_table *table);
+void	start_sleeping(t_philo *philo, t_table *table);
+
 /* ****************************  HELPERS  ***************************** */
 int		ft_usleep(size_t milliseconds);
 size_t	get_current_time(void);
-void	print_action(t_philo *philo, const char *action);
-
+void	print_action(t_philo *philo, t_table *table, const char *action);
+int		safe_atoi(const char *str);
+long	safe_atol(const char *str);
 
 #endif

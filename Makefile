@@ -6,8 +6,7 @@ SRC_DIR	=	src
 OBJ_DIR =	src_o
 UTILS_DIR =	utils
 
-SRC_FILES		=	main.c check_input.c init_structs.c threads.c monitor_routine.c \
-philo_routine.c helpers.c
+SRC_FILES		=	main.c init.c threads.c monitor_routine.c philo_routine.c helpers.c
 
 SRC			=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJ			=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor_routine.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:17:21 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/14 22:15:22 by chiarakappe      ###   ########.fr       */
+/*   Updated: 2025/05/19 16:40:44 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,22 @@ void	*monitor_routine(void *data)
 {
 	int		i;
 	size_t	cur;
-	//t_table	*table;
+	t_table	*table;
 	t_philo	*philo;
 	
-	philo = (t_philo *)data;
+	table = (t_table *)data;
+	philo = table->philos;
 	//table = philo->table;
 	i = -1;
-	cur = get_current_time() - philo->start_time;
-	while (++i < philo->num_of_philos)
+	cur = get_current_time();
+	while (++i < table->num_of_philos)
 	{
-		if (cur > philo[i].time_to_die)
+		printf("cur: %zu\ntable.time_next_meal: %zu\n", cur, table->philos[i].time_next_meal);
+		if (cur > table->philos[i].time_next_meal)
 		{
 			pthread_mutex_lock(philo[i].dead_lock);
 			philo->table->dead_flag = 1;
-			print_action(philo, "died");
+			print_action(philo, table, "died");
 			pthread_mutex_unlock(philo[i].dead_lock);
 			break ;
 		}

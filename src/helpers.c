@@ -6,11 +6,72 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:20:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/14 12:30:21 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/19 15:56:20 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philosophers.h"
+
+void	print_action(t_philo *philo, t_table *table, const char *action)
+{
+	pthread_mutex_lock(philo->write_lock);
+	printf("%zu %d %s\n", get_current_time() - table->start_time, philo->id, action);
+	pthread_mutex_unlock(philo->write_lock);
+}
+
+int	safe_atoi(const char *str)
+{
+	int		i;
+	long	result;
+
+	i = 0;
+	result = 0;
+	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] == '-' || str[i] == '\0')
+		return (-1);
+	if (str[i] == '+')
+		i++;
+	while (str[i])
+	{
+		if (str[i] < '0' || str[i] > '9')
+			return (-1);
+		result = result * 10 + (str[i] - '0');
+		// if (result > 200)
+		// 	return (-1);
+		i++;
+	}
+	if (result == 0)
+		return (-1);
+	return ((int)result);
+}
+
+long	safe_atol(const char *str)
+{
+	int		i;
+	long	result;
+
+	i = 0;
+	result = 0;
+	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] == '-' || str[i] == '\0')
+		return (-1);
+	if (str[i] == '+')
+		i++;
+	while (str[i])
+	{
+		if (str[i] < '0' || str[i] > '9')
+			return (-1);
+		result = result * 10 + (str[i] - '0');
+		// if (result < 0)
+		// 	return (-1);
+		i++;
+	}
+	if (result == 0)
+		return (-1);
+	return (result);
+}
 
 // Improved version of sleep function
 int	ft_usleep(size_t milliseconds)
@@ -34,9 +95,3 @@ size_t	get_current_time(void)
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
-void	print_action(t_philo *philo, const char *action)
-{
-	pthread_mutex_lock(philo->write_lock);
-	printf("%zu %d %s\n", get_current_time() - philo->start_time, philo->id, action);
-	pthread_mutex_unlock(philo->write_lock);
-}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor_routine.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:17:21 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/19 18:34:40 by chiarakappe      ###   ########.fr       */
+/*   Updated: 2025/05/20 16:55:23 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,31 @@ void	*monitor_routine(void *data)
 
 	table = (t_table *)data;
 	philo = table->philos;
-	i = -1;
-	cur = get_current_time();
-	while (++i < table->num_of_philos)
+	while (true)
 	{
-		if (cur > table->philos[i].time_next_meal)
+		i = -1;
+		while (++i < table->num_of_philos)
 		{
-			set_dead(philo, table);
-			exit(EXIT_SUCCESS);
-		}
-		if (philo[i].meals_eaten == philo[i].num_times_to_eat)
-		{
-			if (philo->num_times_to_eat == 0)
-				break ;
+			// printf("DEGUG\n");
+			cur = get_current_time() - table->start_time;
+			if (cur > table->philos[i].time_next_meal)
+			{
+				printf("time for next meal: %zu\n", table->philos[i].time_next_meal);
+				set_dead(philo, table);
+				exit(EXIT_SUCCESS);
+			}
+			// if (philo->num_times_to_eat == 0)
+			// 	break ;
+	/* 		if (table->min_meals > 0 && philo[i].meals_eaten >= (int)table->min_meals)
+			{
+				pthread_mutex_lock(philo->meal_lock);
+				if (philo->num_times_to_eat == 0)
+				{
+					pthread_mutex_unlock(philo->meal_lock);
+					break ;
+				}
+				pthread_mutex_unlock(philo->meal_lock);
+			} */
 		}
 	}
 	return (0);

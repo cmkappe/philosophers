@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:32:57 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/19 19:54:51 by chiarakappe      ###   ########.fr       */
+/*   Updated: 2025/05/20 14:06:58 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdint.h>
 # include <stdlib.h>
 # include <sys/time.h>
+# include <limits.h>
 
 typedef struct s_philo
 {
@@ -31,6 +32,7 @@ typedef struct s_philo
 	int				meals_eaten;
 	int				*dead;
 	size_t			time_next_meal;
+	pthread_mutex_t	fork;
 	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*write_lock;

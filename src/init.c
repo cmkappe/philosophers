@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 17:32:34 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/19 20:05:31 by chiarakappe      ###   ########.fr       */
+/*   Updated: 2025/05/20 14:04:05 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,14 @@ void	init_table(int ac, const char **av, t_table *table)
 	table->time_to_eat = safe_atol(av[3]);
 	table->time_to_sleep = safe_atol(av[4]);
 	//philo.min_meals = -1;
+	if (table->num_of_philos <= 0 || table->time_to_die <= 0 ||
+        table->time_to_eat <= 0 || table->time_to_sleep <= 0)
+    {
+        write(2, "Error: Invalid arguments.\n", 26);
+        exit(EXIT_FAILURE);
+    }
 	if (ac == 6)
-		table->min_meals = safe_atol(av[5]);
+		table->min_meals = safe_atoi(av[5]);
 	else
 		table->min_meals = -1;
 		table->dead_flag = 0;
@@ -62,7 +68,7 @@ void	init_philo(t_table *table)
 
 	i = -1;
 	while (++i < table->num_of_philos)
-		pthread_mutex_init(table->philos[i].l_fork, NULL);
+		pthread_mutex_init(&table->philos[i].fork, NULL);
 	i = -1;
 	while (++i < table->num_of_philos)
 	{
@@ -76,17 +82,20 @@ void	init_philo(t_table *table)
 		table->philos[i].write_lock = &table->write_lock;
 		table->philos[i].dead_lock = &table->dead_lock;
 		table->philos[i].meal_lock = &table->meal_lock;
-		table->philos[i].l_fork = table->philos[i].l_fork;
-		table->philos[i].r_fork = table->philos[(i + 1) % table->num_of_philos].r_fork;
+		table->philos[i].l_fork = &table->philos[i].fork;
+		if (table->num_of_philos == 1)
+			table->philos[i].r_fork= NULL;
+		else
+			table->philos[i].r_fork = &table->philos[(i + 1) % table->num_of_philos].fork;
 		table->philos[i].thread = 0;
 		table->philos[i].table = table;
 	}
 }
 
-/* void	init_table_struct(t_table *table)
+void	init_table_struct(t_table *table)
 {
 	table->dead_flag = 0;
 	pthread_mutex_init(&table->dead_lock, NULL);
 	pthread_mutex_init(&table->meal_lock, NULL);
 	pthread_mutex_init(&table->write_lock, NULL);
-} */
+}

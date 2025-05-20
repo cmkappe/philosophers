@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:20:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/19 15:56:20 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/20 13:48:04 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int	safe_atoi(const char *str)
 		if (str[i] < '0' || str[i] > '9')
 			return (-1);
 		result = result * 10 + (str[i] - '0');
+		if (result > INT_MAX)
+			return (-1);
 		// if (result > 200)
 		// 	return (-1);
 		i++;

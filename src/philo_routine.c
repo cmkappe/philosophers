@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:16:33 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/19 16:33:38 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/20 16:51:41 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,29 @@
 	// Even-ID Philosophers (P0, P2): Pick up the left fork first, then the right fork.
 	// Odd-ID Philosophers (P1, P3): Pick up the right fork first, then the left fork.
 
-static void	take_forks(t_philo *philo, t_table *table)
+static void	_take_forks(t_philo *philo, t_table *table)
 {
-	if (table->num_of_philos % 2 == 0)
+	if (table->num_of_philos == 1)
+	{
+		pthread_mutex_lock(philo->l_fork);
+		print_action(philo, table, "has taken a fork");
+		ft_usleep(table->time_to_die);
+		pthread_mutex_unlock(philo->l_fork);
+		return;
+	}
+
+	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(philo->l_fork);
 		//print_action(philo, "has taken a left fork");
 		print_action(philo, table, "has taken a fork");
-		pthread_mutex_lock(philo->r_fork);
-		// print_action(philo, "has taken a right fork");
-		print_action(philo, table, "has taken a fork");
+		if (philo->r_fork)
+		{
+			pthread_mutex_lock(philo->r_fork);
+			
+			//print_action(philo, "has taken a right fork");
+			print_action(philo, table, "has taken a fork");
+		}
 	}
 	else
 	{
@@ -43,11 +56,11 @@ static void	take_forks(t_philo *philo, t_table *table)
 	
 } */
 
-void	start_eating(t_philo *philo, t_table *table)
+static void	_start_eating(t_philo *philo, t_table *table)
 {
 	pthread_mutex_lock(philo->meal_lock);
-	philo->last_meal = get_current_time();
-	philo->time_next_meal = philo->last_meal + table->time_to_die;
+	// philo->last_meal = get_current_time();
+	philo->time_next_meal = get_current_time() + table->time_to_die;
 	pthread_mutex_unlock(philo->meal_lock);
 
 	print_action(philo, table, "is eating");
@@ -57,28 +70,22 @@ void	start_eating(t_philo *philo, t_table *table)
 	philo->meals_eaten++;
 	pthread_mutex_unlock(philo->meal_lock);
 
-	pthread_mutex_unlock(philo->r_fork);
+	if (philo->r_fork)
+		pthread_mutex_unlock(philo->r_fork);
 	// print_action(philo, "put down the right fork");
 	//print_action(philo, "has left a fork");
 	pthread_mutex_unlock(philo->l_fork);
 	//print_action(philo, "has left a fork");
 	// print_action(philo, "put down the left fork");
-
-	// start time - eating time - usleep for the while that they are eating
-
-	// if eating time goes to 0, unlock forks?
-
-	// if sim stops before eating time is over - dead_flag = 1
-	
 }
 
-void	start_sleeping(t_philo *philo, t_table *table)
+static void	_start_sleeping(t_philo *philo, t_table *table)
 {
 	print_action(philo, table, "is sleeping");
 	ft_usleep(table->time_to_sleep);
 }
 
-void	start_thinking(t_philo *philo, t_table *table)
+static void	_start_thinking(t_philo *philo, t_table *table)
 {
 	print_action(philo, table, "is thinking");
 }
@@ -90,16 +97,16 @@ void *philo_routine(void *data)
 
 	philo = (t_philo *)data;
 	table = philo->table;
-	(void)table;
 	//size_t	cur_time;
 	//printf("----------Debug-------------\n");
 	//printf("time_to_sleep: %zu\n", philo->time_to_sleep);
+	_start_thinking(philo, table);
 	if (philo->id % 2 == 0)
 		ft_usleep(table->time_to_eat / 2);
 	while (1)
 	{
-		take_forks(philo, table);
-		start_eating(philo, table);
+		_take_forks(philo, table);
+		_start_eating(philo, table);
 /* 		if (philo->num_times_to_eat > 0)
 		{
 			philo->num_times_to_eat--;
@@ -107,8 +114,8 @@ void *philo_routine(void *data)
 			if (philo->num_times_to_eat == 0)
 				break ;
 		} */
-		start_sleeping(philo, table);
-		start_thinking(philo, table);
+		_start_sleeping(philo, table);
+		_start_thinking(philo, table);
 	}
 	return NULL;
 }

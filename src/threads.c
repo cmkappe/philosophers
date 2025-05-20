@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   threads.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:14:14 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/19 20:03:38 by chiarakappe      ###   ########.fr       */
+/*   Updated: 2025/05/20 16:47:57 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,10 @@ int	create_threads(t_table *table)
 	if (pthread_create(&table->monitor, NULL,
 			(void*)monitor_routine, table) != 0)
 		return (write(2, "Error: could not create monitor thread!\n", 41), -1);
+	while (!table->dead_flag)
+		ft_usleep(100);
 	i = -1;
 	while (++i < table->num_of_philos)
 		pthread_join(table->philos[i].thread, NULL);
-	return (0);
+	 return (0);
 }

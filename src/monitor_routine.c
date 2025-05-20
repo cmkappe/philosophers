@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor_routine.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:17:21 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/19 18:03:10 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/19 18:34:40 by chiarakappe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	*monitor_routine(void *data)
 		if (cur > table->philos[i].time_next_meal)
 		{
 			set_dead(philo, table);
-			break ;
+			exit(EXIT_SUCCESS);
 		}
 		if (philo[i].meals_eaten == philo[i].num_times_to_eat)
 		{

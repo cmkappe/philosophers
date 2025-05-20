@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   threads.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:14:14 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/19 18:06:47 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/19 20:03:38 by chiarakappe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philosophers.h"
 
-int	create_threads(t_philo *philo, t_table *table)
+int	create_threads(t_table *table)
 {
 	int			i;
 
@@ -20,7 +20,7 @@ int	create_threads(t_philo *philo, t_table *table)
 	table->start_time = get_current_time();
 	while (++i < table->num_of_philos)
 	{
-		if (pthread_create(&philo[i].thread, NULL,
+		if (pthread_create(&table->philos[i].thread, NULL,
 				(void*)philo_routine, &table->philos[i]) != 0)
 			return (write(2, "Error: could not create threads!\n", 34), -1);
 	}
@@ -29,8 +29,6 @@ int	create_threads(t_philo *philo, t_table *table)
 		return (write(2, "Error: could not create monitor thread!\n", 41), -1);
 	i = -1;
 	while (++i < table->num_of_philos)
-		pthread_join(&philo->thread[i], NULL);
-	if (table->dead_flag == 1)
-		print_action(philo, table, "died");
+		pthread_join(table->philos[i].thread, NULL);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:32:57 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/19 16:36:13 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/19 19:54:51 by chiarakappe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,9 @@ typedef struct s_table
 void	check_input(int ac, const char **av);
 // void	init_args(int ac, const char **av);
 void	init_table(int ac, const char **av, t_table *table);
-void	init_philo(t_philo *philos, pthread_mutex_t *forks, t_table *table);
+void	init_philo(t_table *table);
 
-int		create_threads(t_philo *philo, t_table *table);
+int		create_threads(t_table *table);
 
 /* *****************************  SIM  ****************************** */
 void	*philo_routine(void *data);

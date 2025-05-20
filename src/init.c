@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 17:32:34 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/19 16:35:59 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/19 20:05:31 by chiarakappe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,18 +56,18 @@ void	init_table(int ac, const char **av, t_table *table)
 	pthread_mutex_init(&table->write_lock, NULL);
 }
 
-void	init_philo(t_philo *philos, pthread_mutex_t *forks, t_table *table)
+void	init_philo(t_table *table)
 {
 	int	i;
 
 	i = -1;
-	(void)philos;
+	while (++i < table->num_of_philos)
+		pthread_mutex_init(table->philos[i].l_fork, NULL);
+	i = -1;
 	while (++i < table->num_of_philos)
 	{
-		pthread_mutex_init(&forks[i], NULL);
-
 		table->philos[i].id = i + 1;
-		table->philos[i].eating = 0;
+		//table->philos[i].eating = 0;
 		table->philos[i].meals_eaten = 0;
 		table->philos[i].last_meal = get_current_time();
 		table->philos[i].time_next_meal = table->time_to_die;
@@ -76,8 +76,8 @@ void	init_philo(t_philo *philos, pthread_mutex_t *forks, t_table *table)
 		table->philos[i].write_lock = &table->write_lock;
 		table->philos[i].dead_lock = &table->dead_lock;
 		table->philos[i].meal_lock = &table->meal_lock;
-		table->philos[i].l_fork = &forks[i];
-		table->philos[i].r_fork = &forks[(i + 1) % table->num_of_philos];
+		table->philos[i].l_fork = table->philos[i].l_fork;
+		table->philos[i].r_fork = table->philos[(i + 1) % table->num_of_philos].r_fork;
 		table->philos[i].thread = 0;
 		table->philos[i].table = table;
 	}

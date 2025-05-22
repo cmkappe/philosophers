@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 16:06:50 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/12 17:50:36 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/22 17:05:16 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,18 @@ Ensure that all threads are created before starting the simulation, otherwise, y
 
 
 
+
  */
+
+
+
+ int sim_check(t_table *table)
+{
+	int res;
+	pthread_mutex_lock(&table->dead_lock);
+	res = table->dead_flag;
+	pthread_mutex_unlock(&table->dead_lock);
+	
+	
+	return (res);
+}

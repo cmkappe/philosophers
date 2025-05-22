@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 17:32:34 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/20 14:04:05 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/22 16:07:01 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	init_table(int ac, const char **av, t_table *table)
 		table->min_meals = safe_atoi(av[5]);
 	else
 		table->min_meals = -1;
-		table->dead_flag = 0;
+	table->dead_flag = 0;
 	pthread_mutex_init(&table->dead_lock, NULL);
 	pthread_mutex_init(&table->meal_lock, NULL);
 	pthread_mutex_init(&table->write_lock, NULL);

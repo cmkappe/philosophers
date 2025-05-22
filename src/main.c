@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:32:04 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/20 16:03:30 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/22 13:19:16 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	main(int ac, const char **av)
 	check_input(ac, av);
 	init_table(ac, av, &table);
 	init_philo(&table);
+	//printf("num_times_to_eat: %d\n,", table.philos->num_times_to_eat);
 	if (!create_threads(&table))
 		return (-1);
 	return (0);

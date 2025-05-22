@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:16:33 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/20 16:51:41 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/22 17:05:11 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@ static void	_take_forks(t_philo *philo, t_table *table)
 	{
 		pthread_mutex_lock(philo->l_fork);
 		print_action(philo, table, "has taken a fork");
-		ft_usleep(table->time_to_die);
-		pthread_mutex_unlock(philo->l_fork);
+		//ft_usleep(table->time_to_die);
+		while (!philo->r_fork)
+			ft_usleep(100);
+		// pthread_mutex_lock(philo->r_fork);
 		return;
 	}
 
@@ -34,7 +36,6 @@ static void	_take_forks(t_philo *philo, t_table *table)
 		if (philo->r_fork)
 		{
 			pthread_mutex_lock(philo->r_fork);
-			
 			//print_action(philo, "has taken a right fork");
 			print_action(philo, table, "has taken a fork");
 		}
@@ -43,9 +44,9 @@ static void	_take_forks(t_philo *philo, t_table *table)
 	{
 		pthread_mutex_lock(philo->r_fork);
 		print_action(philo, table, "has taken a fork");
-		// print_action(philo, "has taken a right fork");
+		//print_action(philo, table, "has taken a right fork");
 		pthread_mutex_lock(philo->l_fork);
-		//print_action(philo, "has taken a left fork");
+		//print_action(philo, table, "has taken a left fork");
 		print_action(philo, table, "has taken a fork");
 	}
 }
@@ -59,19 +60,14 @@ static void	_take_forks(t_philo *philo, t_table *table)
 static void	_start_eating(t_philo *philo, t_table *table)
 {
 	pthread_mutex_lock(philo->meal_lock);
-	// philo->last_meal = get_current_time();
-	philo->time_next_meal = get_current_time() + table->time_to_die;
+	philo->meals_eaten++;
+	philo->time_next_meal = get_current_time() - table->start_time + table->time_to_die;
 	pthread_mutex_unlock(philo->meal_lock);
-
 	print_action(philo, table, "is eating");
 	ft_usleep(table->time_to_eat);
 
-	pthread_mutex_lock(philo->meal_lock);
-	philo->meals_eaten++;
-	pthread_mutex_unlock(philo->meal_lock);
 
-	if (philo->r_fork)
-		pthread_mutex_unlock(philo->r_fork);
+	pthread_mutex_unlock(philo->r_fork);
 	// print_action(philo, "put down the right fork");
 	//print_action(philo, "has left a fork");
 	pthread_mutex_unlock(philo->l_fork);
@@ -88,7 +84,10 @@ static void	_start_sleeping(t_philo *philo, t_table *table)
 static void	_start_thinking(t_philo *philo, t_table *table)
 {
 	print_action(philo, table, "is thinking");
+	ft_usleep(5);
 }
+
+
 
 void *philo_routine(void *data)
 {
@@ -97,24 +96,22 @@ void *philo_routine(void *data)
 
 	philo = (t_philo *)data;
 	table = philo->table;
-	//size_t	cur_time;
-	//printf("----------Debug-------------\n");
-	//printf("time_to_sleep: %zu\n", philo->time_to_sleep);
-	_start_thinking(philo, table);
-	if (philo->id % 2 == 0)
+	if (philo->id % 2 == 1)
+	{
+		_start_thinking(philo, table);
 		ft_usleep(table->time_to_eat / 2);
-	while (1)
+	}
+	while (!sim_check(table))
 	{
 		_take_forks(philo, table);
+		if (sim_check(table))
+			break ;
 		_start_eating(philo, table);
-/* 		if (philo->num_times_to_eat > 0)
-		{
-			philo->num_times_to_eat--;
-			printf("philo id %d num times to eat: %d\n", philo->id, philo->num_times_to_eat);
-			if (philo->num_times_to_eat == 0)
-				break ;
-		} */
+		if (sim_check(table))
+			break ;
 		_start_sleeping(philo, table);
+		if (sim_check(table))
+			break ;
 		_start_thinking(philo, table);
 	}
 	return NULL;

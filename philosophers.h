@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:32:57 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/22 17:06:37 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/22 22:04:28 by chiarakappe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ void	*monitor_routine(void *data);
 
 void	start_eating(t_philo *philo, t_table *table);
 void	start_sleeping(t_philo *philo, t_table *table);
+
+int 	sim_check(t_table *table);
 
 /* ****************************  HELPERS  ***************************** */
 int		ft_usleep(size_t milliseconds);

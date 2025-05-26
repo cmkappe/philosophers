@@ -6,7 +6,7 @@
 /*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:17:21 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/22 22:34:37 by chiarakappe      ###   ########.fr       */
+/*   Updated: 2025/05/26 19:03:47 by chiarakappe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,20 @@ void	check_for_dead(t_table *table)
 {
 	int	i;
 	size_t	cur;
+	size_t	next_meal;
 	
 	i = -1;
 	while (++i < table->num_of_philos)
 	{
 		cur = get_current_time() - table->start_time;
-		// printf("cur time: %zu\n", cur);
-		// printf("philo number :%d time_next_meal: %zu\n",table->philos[i].id, table->philos[i].time_next_meal);
-		if (cur > table->philos[i].time_next_meal)
+
+		pthread_mutex_lock(&table->meal_lock);
+		next_meal = table->philos[i].time_next_meal;
+		pthread_mutex_unlock(&table->meal_lock);
+		if (cur > next_meal)
 		{
-			set_dead(table);
 			print_action(&table->philos[i], table, "died");
+			set_dead(table);
 			exit(EXIT_SUCCESS);
 		}
 	}

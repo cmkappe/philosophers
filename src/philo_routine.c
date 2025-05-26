@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_routine.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:16:33 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/22 17:05:11 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/26 19:11:11 by chiarakappe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,16 @@ static void	_start_eating(t_philo *philo, t_table *table)
 {
 	pthread_mutex_lock(philo->meal_lock);
 	philo->meals_eaten++;
-	philo->time_next_meal = get_current_time() - table->start_time + table->time_to_die;
+	philo->time_next_meal = get_current_time() - table->start_time
+			+ table->time_to_die;
 	pthread_mutex_unlock(philo->meal_lock);
+	
 	print_action(philo, table, "is eating");
+	
+	pthread_mutex_lock(&table->meal_lock);
+	philo->time_next_meal = get_current_time() - table->start_time
+			+ table->time_to_die;
+	pthread_mutex_unlock(&table->meal_lock);
 	ft_usleep(table->time_to_eat);
 
 

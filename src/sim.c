@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sim.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 16:06:50 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/28 12:42:43 by chiarakappe      ###   ########.fr       */
+/*   Updated: 2025/05/28 14:34:44 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,7 @@
 
 int sim_check(t_table *table)
 {
-	int res;
-	
-	pthread_mutex_lock(&table->dead_lock);
-	res = table->dead_flag;
-	pthread_mutex_unlock(&table->dead_lock);
-
-	return (res);
+	return (get_int_locked(&table->dead_flag, &table->dead_lock));
 }
 
 int get_int_locked(int *ptr, pthread_mutex_t *lock)
@@ -39,6 +33,22 @@ void set_int_locked(int *ptr, pthread_mutex_t *lock, int value)
     pthread_mutex_unlock(lock);
 }
 
+size_t	get_size_t_locked(size_t *ptr, pthread_mutex_t *lock)
+{
+	size_t	v;
+
+	pthread_mutex_lock(lock);
+	v = *ptr;
+	pthread_mutex_unlock(lock);
+	return (v);
+}
+
+void set_size_t_locked(size_t *ptr, pthread_mutex_t *lock, size_t value)
+{
+	pthread_mutex_lock(lock);
+	*ptr = value;
+	pthread_mutex_unlock(lock);
+}
 
 
 /* uint64_t	read_time(t_data *data, uint64_t value)

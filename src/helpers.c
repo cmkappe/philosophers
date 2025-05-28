@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helpers.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:20:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/26 18:00:27 by chiarakappe      ###   ########.fr       */
+/*   Updated: 2025/05/28 14:29:27 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 void	print_action(t_philo *philo, t_table *table, const char *action)
 {
 	size_t	now;
-	
+
+	if (get_int_locked(&table->dead_flag, &table->dead_lock) != 0)
+		return ;
 	now = get_current_time() - table->start_time;
 	pthread_mutex_lock(philo->write_lock);
 	printf("%zu %d %s\n", now, philo->id, action);

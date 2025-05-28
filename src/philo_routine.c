@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_routine.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:16:33 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/26 19:11:11 by chiarakappe      ###   ########.fr       */
+/*   Updated: 2025/05/28 14:39:43 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,29 @@ static void	_take_forks(t_philo *philo, t_table *table)
 
 static void	_start_eating(t_philo *philo, t_table *table)
 {
+	size_t	next_meal;
+	
+	pthread_mutex_lock(philo->meal_lock);
+	philo->meals_eaten++;
+	philo->time_next_meal = get_current_time() - table->start_time
+			+ table->time_to_die;
+	pthread_mutex_unlock(philo->meal_lock);
+
+	print_action(philo, table, "is eating");
+
+	pthread_mutex_lock(&table->meal_lock);
+	philo->time_next_meal = get_current_time() - table->start_time
+			+ table->time_to_die;
+	pthread_mutex_unlock(&table->meal_lock);
+	ft_usleep(table->time_to_eat);
+
+
+	pthread_mutex_unlock(philo->r_fork);
+	pthread_mutex_unlock(philo->l_fork);
+}
+
+/* static void	_start_eating(t_philo *philo, t_table *table)
+{
 	pthread_mutex_lock(philo->meal_lock);
 	philo->meals_eaten++;
 	philo->time_next_meal = get_current_time() - table->start_time
@@ -80,7 +103,7 @@ static void	_start_eating(t_philo *philo, t_table *table)
 	pthread_mutex_unlock(philo->l_fork);
 	//print_action(philo, "has left a fork");
 	// print_action(philo, "put down the left fork");
-}
+} */
 
 static void	_start_sleeping(t_philo *philo, t_table *table)
 {

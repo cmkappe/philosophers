@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor_routine.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:17:21 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/27 00:20:07 by chiarakappe      ###   ########.fr       */
+/*   Updated: 2025/05/28 14:35:24 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,7 @@
 
 static void	set_dead(t_table *table)
 {
-	pthread_mutex_lock(&table->dead_lock);
-	table->dead_flag = 1;
-	pthread_mutex_unlock(&table->dead_lock);
+	set_int_locked(&table->dead_flag, &table->dead_lock, 1);
 }
 
 void	check_for_dead(t_table *table)
@@ -35,15 +33,14 @@ void	check_for_dead(t_table *table)
 	int	i;
 	size_t	cur;
 	size_t	next_meal;
-	
+
 	i = -1;
 	while (++i < table->num_of_philos)
 	{
 		cur = get_current_time() - table->start_time;
 
-		pthread_mutex_lock(&table->meal_lock);
-		next_meal = table->philos[i].time_next_meal;
-		pthread_mutex_unlock(&table->meal_lock);
+		next_meal = get_size_t_locked(&table->philos[i].time_next_meal,
+				&table->meal_lock);
 		if (cur > next_meal)
 		{
 			print_action(&table->philos[i], table, "died");

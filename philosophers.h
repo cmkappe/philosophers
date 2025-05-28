@@ -6,7 +6,7 @@
 /*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:32:57 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/22 22:58:36 by chiarakappe      ###   ########.fr       */
+/*   Updated: 2025/05/27 00:44:29 by chiarakappe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,13 @@ void	start_eating(t_philo *philo, t_table *table);
 void	start_sleeping(t_philo *philo, t_table *table);
 
 int 	sim_check(t_table *table);
+
+/* *****************************  SIM  ****************************** */
+int   	get_int_locked(int *ptr, pthread_mutex_t *lock);
+void  	set_int_locked(int *ptr, pthread_mutex_t *lock, int value);
+size_t 	get_size_t_locked(size_t *ptr, pthread_mutex_t *lock);
+void  	set_size_t_locked(size_t *ptr, pthread_mutex_t *lock, size_t value);
+
 
 /* ****************************  HELPERS  ***************************** */
 int		ft_usleep(size_t milliseconds);

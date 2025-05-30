@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:32:04 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/22 22:02:19 by chiarakappe      ###   ########.fr       */
+/*   Updated: 2025/05/30 17:28:05 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,14 @@ int	main(int ac, const char **av)
 	t_table			table;
 
 	// philos = NULL;
-	check_input(ac, av);
-	init_table(ac, av, &table);
+	if (check_input(ac, av) < 0)
+		return (EXIT_FAILURE);
+	if (init_table(ac, av, &table) < 0)
+		return (EXIT_FAILURE);
 	init_philo(&table);
-	//printf("num_times_to_eat: %d\n,", table.philos->num_times_to_eat);
 	if (!create_threads(&table))
-		return (-1);
-	return (0);
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
 
 

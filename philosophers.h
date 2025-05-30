@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:32:57 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/27 00:44:29 by chiarakappe      ###   ########.fr       */
+/*   Updated: 2025/05/30 17:27:46 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ typedef struct s_table
 
 
 /* *****************************  INIT  ****************************** */
-void	check_input(int ac, const char **av);
+int	check_input(int ac, const char **av);
 // void	init_args(int ac, const char **av);
-void	init_table(int ac, const char **av, t_table *table);
+int	init_table(int ac, const char **av, t_table *table);
 void	init_philo(t_table *table);
 
 int		create_threads(t_table *table);
@@ -75,7 +75,7 @@ void	start_sleeping(t_philo *philo, t_table *table);
 
 int 	sim_check(t_table *table);
 
-/* *****************************  SIM  ****************************** */
+/* ****************************  THREADS  ***************************** */
 int   	get_int_locked(int *ptr, pthread_mutex_t *lock);
 void  	set_int_locked(int *ptr, pthread_mutex_t *lock, int value);
 size_t 	get_size_t_locked(size_t *ptr, pthread_mutex_t *lock);

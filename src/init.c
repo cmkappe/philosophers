@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 17:32:34 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/26 17:50:22 by chiarakappe      ###   ########.fr       */
+/*   Updated: 2025/05/30 17:26:50 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philosophers.h"
 
-void	check_input(int ac, const char **av)
+int	check_input(int ac, const char **av)
 {
 	int		i;
 
@@ -20,12 +20,12 @@ void	check_input(int ac, const char **av)
 	{
 		write(2, "Error: Invalid number of arguments.", 36);
 		write(2, " Expected 4 or 5 arguments.\n", 29);
-		exit(EXIT_FAILURE);
+		return (-1);
 	}
 	if (safe_atoi(av[1]) > 200)
 	{
 		write(2, "Error: Number of philosophers cannot exceed 200.\n", 50);
-		exit(EXIT_FAILURE);
+		return (-1);
 	}
 	i = 0;
 	while (++i < ac)
@@ -33,13 +33,14 @@ void	check_input(int ac, const char **av)
 		if (safe_atol(av[i]) <= 0)
 		{
 			write(2, "Error: All arguments must be positive integers.\n", 49);
-			exit(EXIT_FAILURE);
+			return (-1);
 		}
 	}
 	write(1, "Initialization successful.\n", 27);
+	return (0);
 }
 
-void	init_table(int ac, const char **av, t_table *table)
+int	init_table(int ac, const char **av, t_table *table)
 {
 	table->num_of_philos = safe_atoi(av[1]);
 	table->time_to_die = safe_atol(av[2]);
@@ -50,16 +51,18 @@ void	init_table(int ac, const char **av, t_table *table)
         table->time_to_eat <= 0 || table->time_to_sleep <= 0)
     {
         write(2, "Error: Invalid arguments.\n", 26);
-        exit(EXIT_FAILURE);
+        return (-1);
     }
 	if (ac == 6)
 		table->min_meals = safe_atoi(av[5]);
 	else
 		table->min_meals = -1;
 	table->dead_flag = 0;
-	pthread_mutex_init(&table->dead_lock, NULL);
-	pthread_mutex_init(&table->meal_lock, NULL);
-	pthread_mutex_init(&table->write_lock, NULL);
+	if (pthread_mutex_init(&table->dead_lock, NULL) != 0
+	|| pthread_mutex_init(&table->meal_lock, NULL) != 0
+	|| pthread_mutex_init(&table->write_lock, NULL)!= 0)
+		return (write(2, "Error: mutex init failed.\n", 27), -1);
+	return (0);
 }
 
 void	init_philo(t_table *table)

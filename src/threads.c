@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   threads.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:14:14 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/22 22:54:42 by chiarakappe      ###   ########.fr       */
+/*   Updated: 2025/05/30 16:10:20 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,6 @@ int	create_threads(t_table *table)
 	i = -1;
 	while (++i < table->num_of_philos)
 		pthread_join(table->philos[i].thread, NULL);
-	 return (0);
+	pthread_join(table->monitor, NULL);
+	return (0);
 }

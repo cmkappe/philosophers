@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:17:21 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/28 14:35:24 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/30 16:19:49 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 } */
 
-static void	set_dead(t_table *table)
+static void	_set_dead(t_table *table)
 {
 	set_int_locked(&table->dead_flag, &table->dead_lock, 1);
 }
@@ -44,27 +44,27 @@ void	check_for_dead(t_table *table)
 		if (cur > next_meal)
 		{
 			print_action(&table->philos[i], table, "died");
-			set_dead(table);
-			exit(EXIT_SUCCESS);
+			_set_dead(table);
+			return ;
 		}
 	}
 }
 
-static void	check_if_ate(t_table *table)
+static void	_check_if_ate(t_table *table)
 {
 	int	i;
+	int	meals;
 
 	i = -1;
 	while (++i < table->num_of_philos)
 	{
-		if (!(table->philos[i].meals_eaten >= table->min_meals))
-		return ;
+		pthread_mutex_lock(table->philos[i].meal_lock);
+		meals = table->philos[i].meals_eaten;
+		pthread_mutex_unlock(table->philos[i].meal_lock);
+		if (meals < table->min_meals)
+			return ;
 	}
-	printf("DEBUG\n");
-	//exit(EXIT_SUCCESS);
-	pthread_mutex_lock(&table->dead_lock);
-	table->dead_flag = 1;
-	pthread_mutex_lock(&table->dead_lock);
+	set_int_locked(&table->dead_flag, &table->dead_lock, 1);
 }
 
 void	*monitor_routine(void *data)
@@ -72,13 +72,12 @@ void	*monitor_routine(void *data)
 	t_table	*table;
 
 	table = (t_table *)data;
-	while (true)
+	while (!sim_check(table))
 	{
 		check_for_dead(table);
 		if (table->min_meals > 0)
-		{
-			check_if_ate(table);
-		}
+			_check_if_ate(table);
+		ft_usleep(1);
 	}
-	return (0);
+	return NULL;
 }

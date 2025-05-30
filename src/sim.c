@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 16:06:50 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/28 14:34:44 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/30 16:00:39 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,24 +49,3 @@ void set_size_t_locked(size_t *ptr, pthread_mutex_t *lock, size_t value)
 	*ptr = value;
 	pthread_mutex_unlock(lock);
 }
-
-
-/* uint64_t	read_time(t_data *data, uint64_t value)
-{
-	uint64_t	res;
-
-	pthread_mutex_lock(&data->monitor);
-	res = value;
-	pthread_mutex_unlock(&data->monitor);
-	return (res);
-} */
-
-/* 
-Ensure that all threads are created before starting the simulation, otherwise, you have to wait until all threads are ready.
-	while (!create_threads())
-	
-	;
- */
-
-
-

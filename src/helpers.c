@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:20:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/30 16:00:05 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/31 17:40:28 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ int	safe_atoi(const char *str)
 		result = result * 10 + (str[i] - '0');
 		if (result > INT_MAX)
 			return (-1);
-		// if (result > 200)
-		// 	return (-1);
 		i++;
 	}
 	if (result == 0)
@@ -71,8 +69,6 @@ long	safe_atol(const char *str)
 		if (str[i] < '0' || str[i] > '9')
 			return (-1);
 		result = result * 10 + (str[i] - '0');
-		// if (result < 0)
-		// 	return (-1);
 		i++;
 	}
 	if (result == 0)
@@ -80,7 +76,6 @@ long	safe_atol(const char *str)
 	return (result);
 }
 
-// Improved version of sleep function
 int	ft_usleep(size_t milliseconds)
 {
 	size_t	start;
@@ -90,8 +85,6 @@ int	ft_usleep(size_t milliseconds)
 		usleep(500);
 	return (0);
 }
-
-// Gets the current time in milliseconds
 
 size_t	get_current_time(void)
 {

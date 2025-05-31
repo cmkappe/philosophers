@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:32:04 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/31 17:38:48 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/31 17:39:47 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	main(int ac, const char **av)
 {
 	t_table			table;
 
-	// philos = NULL;
 	if (check_input(ac, av) < 0)
 		return (EXIT_FAILURE);
 	if (init_table(ac, av, &table) < 0)

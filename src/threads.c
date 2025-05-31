@@ -6,11 +6,45 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:14:14 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/30 16:10:20 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/31 18:54:40 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philosophers.h"
+
+int	get_int_locked(int *ptr, pthread_mutex_t *lock)
+{
+	int	v;
+
+	pthread_mutex_lock(lock);
+	v = *ptr;
+	pthread_mutex_unlock(lock);
+	return (v);
+}
+
+void	set_int_locked(int *ptr, pthread_mutex_t *lock, int value)
+{
+	pthread_mutex_lock(lock);
+	*ptr = value;
+	pthread_mutex_unlock(lock);
+}
+
+size_t	get_size_t_locked(size_t *ptr, pthread_mutex_t *lock)
+{
+	size_t	v;
+
+	pthread_mutex_lock(lock);
+	v = *ptr;
+	pthread_mutex_unlock(lock);
+	return (v);
+}
+
+void	set_size_t_locked(size_t *ptr, pthread_mutex_t *lock, size_t value)
+{
+	pthread_mutex_lock(lock);
+	*ptr = value;
+	pthread_mutex_unlock(lock);
+}
 
 int	create_threads(t_table *table)
 {

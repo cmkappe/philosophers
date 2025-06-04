@@ -6,16 +6,11 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 16:06:50 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/31 17:55:50 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/06/04 17:05:52 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philosophers.h"
-
-int	sim_check(t_table *table)
-{
-	return (get_int_locked(&table->dead_flag, &table->dead_lock));
-}
 
 void	*monitor_routine(void *data)
 {
@@ -27,15 +22,10 @@ void	*monitor_routine(void *data)
 		check_for_dead(table);
 		if (table->min_meals > 0)
 			check_if_ate(table);
-		ft_usleep(1);
+		ft_usleep(10);
 	}
 	return (NULL);
 }
-
-// Even-ID Philosophers (P0, P2):
-//		Pick up the left fork first, then the right fork.
-// Odd-ID Philosophers (P1, P3):
-//		Pick up the right fork first, then the left fork.
 
 void	single_philo(t_philo *philo, t_table *table)
 {
@@ -47,23 +37,53 @@ void	single_philo(t_philo *philo, t_table *table)
 	return ;
 }
 
+static inline bool	unlock_if_stopped(pthread_mutex_t *fork, t_table *table)
+{
+	if (sim_check(table))
+	{
+		pthread_mutex_unlock(fork);
+		return (true);
+	}
+	return (false);
+}
+
+// Even-ID Philosophers (P0, P2):
+//		Pick up the left fork first, then the right fork.
+// Odd-ID Philosophers (P1, P3):
+//		Pick up the right fork first, then the left fork.
+
 void	multiple_philo(t_philo *philo, t_table *table)
 {
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(philo->l_fork);
+		if (unlock_if_stopped(philo->l_fork, table))
+			return ;
 		print_action(philo, table, "has taken a fork");
 		if (philo->r_fork)
 		{
 			pthread_mutex_lock(philo->r_fork);
+			if (unlock_if_stopped(philo->r_fork, table))
+				return ;
 			print_action(philo, table, "has taken a fork");
 		}
 	}
 	else
 	{
-		pthread_mutex_lock(philo->r_fork);
-		print_action(philo, table, "has taken a fork");
+		if (philo->r_fork)
+		{
+			pthread_mutex_lock(philo->r_fork);
+			if (unlock_if_stopped(philo->r_fork, table))
+				return ;
+			print_action(philo, table, "has taken a fork");
+		}
 		pthread_mutex_lock(philo->l_fork);
+		if (unlock_if_stopped(philo->l_fork, table))
+		{
+			if (philo->r_fork)
+				pthread_mutex_unlock(philo->r_fork);
+			return ;
+		}
 		print_action(philo, table, "has taken a fork");
 	}
 }

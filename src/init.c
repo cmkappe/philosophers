@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 17:32:34 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/31 18:55:04 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/06/04 15:10:09 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	check_input(int ac, const char **av)
 {
 	int		i;
+	long	val;
 
 	if (!(ac == 5 || ac == 6))
 	{
@@ -30,11 +31,10 @@ int	check_input(int ac, const char **av)
 	i = 0;
 	while (++i < ac)
 	{
-		if (safe_atol(av[i]) <= 0)
-		{
-			write(2, "Error: All arguments must be positive integers.\n", 49);
-			return (-1);
-		}
+		val = safe_atol(av[i]);
+		if (val <= 0 || val > INT_MAX)
+			return (write(2, "Error: Arguments must be valid integers", 40),
+				write(2, " within range.\n", 16), -1);
 	}
 	write(1, "Initialization successful.\n", 27);
 	return (0);
@@ -46,8 +46,8 @@ int	init_table(int ac, const char **av, t_table *table)
 	table->time_to_die = safe_atol(av[2]);
 	table->time_to_eat = safe_atol(av[3]);
 	table->time_to_sleep = safe_atol(av[4]);
-	if (table->num_of_philos <= 0 || table->time_to_die <= 0
-		|| table->time_to_eat <= 0 || table->time_to_sleep <= 0)
+	if (table->num_of_philos < 0 || table->time_to_die < 0
+		|| table->time_to_eat < 0 || table->time_to_sleep < 0)
 	{
 		write(2, "Error: Invalid arguments.\n", 26);
 		return (-1);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   monitor_routine.c                                  :+:      :+:    :+:   */
+/*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:17:21 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/31 17:54:34 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/06/04 13:19:56 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 static void	_set_dead(t_table *table)
 {
 	set_int_locked(&table->dead_flag, &table->dead_lock, 1);
+}
+
+int	sim_check(t_table *table)
+{
+	return (get_int_locked(&table->dead_flag, &table->dead_lock));
 }
 
 void	check_for_dead(t_table *table)

@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:20:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/31 17:40:28 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/06/04 13:48:45 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,12 @@ int	safe_atoi(const char *str)
 long	safe_atol(const char *str)
 {
 	int		i;
-	long	result;
+	long	res;
+	long	m;
 
 	i = 0;
-	result = 0;
+	res = 0;
+	m = LONG_MAX / 10;
 	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
 		i++;
 	if (str[i] == '-' || str[i] == '\0')
@@ -68,12 +70,14 @@ long	safe_atol(const char *str)
 	{
 		if (str[i] < '0' || str[i] > '9')
 			return (-1);
-		result = result * 10 + (str[i] - '0');
+		if (res > m || (res == m && (str[i] - '0') > LONG_MAX % 10))
+			return (-1);
+		res = res * 10 + (str[i] - '0');
 		i++;
 	}
-	if (result == 0)
+	if (res == 0)
 		return (-1);
-	return (result);
+	return (res);
 }
 
 int	ft_usleep(size_t milliseconds)

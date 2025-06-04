@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:32:57 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/31 18:56:21 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/05/31 19:00:02 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,13 @@ int		init_table(int ac, const char **av, t_table *table);
 void	init_philo(t_table *table);
 int		create_threads(t_table *table);
 
-/* *****************************  SIM  ****************************** */
-
+/* ******************************  SIM  ******************************* */
 void	single_philo(t_philo *philo, t_table *table);
 void	multiple_philo(t_philo *philo, t_table *table);
 void	take_forks(t_philo *philo, t_table *table);
 void	start_eating(t_philo *philo, t_table *table);
 void	start_sleeping(t_philo *philo, t_table *table);
 void	start_thinking(t_philo *philo, t_table *table);
-
 void	*philo_routine(void *data);
 
 void	check_for_dead(t_table *table);
@@ -78,7 +76,7 @@ void	*monitor_routine(void *data);
 
 int		sim_check(t_table *table);
 
-/* ****************************  THREADS  ***************************** */
+/* *****************************  LOCKS  ****************************** */
 int		get_int_locked(int *ptr, pthread_mutex_t *lock);
 void	set_int_locked(int *ptr, pthread_mutex_t *lock, int value);
 size_t	get_size_t_locked(size_t *ptr, pthread_mutex_t *lock);

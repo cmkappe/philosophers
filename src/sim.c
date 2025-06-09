@@ -6,26 +6,11 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 16:06:50 by ckappe            #+#    #+#             */
-/*   Updated: 2025/06/04 17:05:52 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/06/09 17:06:40 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philosophers.h"
-
-void	*monitor_routine(void *data)
-{
-	t_table	*table;
-
-	table = (t_table *)data;
-	while (!sim_check(table))
-	{
-		check_for_dead(table);
-		if (table->min_meals > 0)
-			check_if_ate(table);
-		ft_usleep(10);
-	}
-	return (NULL);
-}
 
 void	single_philo(t_philo *philo, t_table *table)
 {
@@ -52,22 +37,25 @@ static inline bool	unlock_if_stopped(pthread_mutex_t *fork, t_table *table)
 // Odd-ID Philosophers (P1, P3):
 //		Pick up the right fork first, then the left fork.
 
+void	even_num_of_philos(t_philo *philo, t_table *table)
+{
+	pthread_mutex_lock(philo->l_fork);
+	if (unlock_if_stopped(philo->l_fork, table))
+		return ;
+	print_action(philo, table, "has taken a fork");
+	if (philo->r_fork)
+	{
+		pthread_mutex_lock(philo->r_fork);
+		if (unlock_if_stopped(philo->r_fork, table))
+			return ;
+		print_action(philo, table, "has taken a fork");
+	}
+}
+
 void	multiple_philo(t_philo *philo, t_table *table)
 {
 	if (philo->id % 2 == 0)
-	{
-		pthread_mutex_lock(philo->l_fork);
-		if (unlock_if_stopped(philo->l_fork, table))
-			return ;
-		print_action(philo, table, "has taken a fork");
-		if (philo->r_fork)
-		{
-			pthread_mutex_lock(philo->r_fork);
-			if (unlock_if_stopped(philo->r_fork, table))
-				return ;
-			print_action(philo, table, "has taken a fork");
-		}
-	}
+		even_num_of_philos(philo, table);
 	else
 	{
 		if (philo->r_fork)

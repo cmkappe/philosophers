@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:17:21 by ckappe            #+#    #+#             */
-/*   Updated: 2025/06/04 13:19:56 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/06/09 17:21:54 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,19 @@ void	check_if_ate(t_table *table)
 			return ;
 	}
 	set_int_locked(&table->dead_flag, &table->dead_lock, 1);
+}
+
+void	*monitor_routine(void *data)
+{
+	t_table	*table;
+
+	table = (t_table *)data;
+	while (!sim_check(table))
+	{
+		check_for_dead(table);
+		if (table->min_meals > 0)
+			check_if_ate(table);
+		ft_usleep(1);
+	}
+	return (NULL);
 }

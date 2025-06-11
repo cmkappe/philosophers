@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:17:21 by ckappe            #+#    #+#             */
-/*   Updated: 2025/06/09 17:21:54 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/06/11 17:54:08 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,10 @@ void	*monitor_routine(void *data)
 	table = (t_table *)data;
 	while (!sim_check(table))
 	{
+		ft_usleep(1);
 		check_for_dead(table);
 		if (table->min_meals > 0)
 			check_if_ate(table);
-		ft_usleep(1);
 	}
 	return (NULL);
 }

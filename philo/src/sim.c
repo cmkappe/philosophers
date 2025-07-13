@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 16:06:50 by ckappe            #+#    #+#             */
-/*   Updated: 2025/06/09 17:06:40 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/07/13 20:05:56 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 void	single_philo(t_philo *philo, t_table *table)
 {
+	if (print_action(philo, table, "has taken a fork"))
+		return ;
 	pthread_mutex_lock(philo->l_fork);
-	print_action(philo, table, "has taken a fork");
 	while (!sim_check(table))
 		ft_usleep(100);
 	pthread_mutex_unlock(philo->l_fork);
@@ -40,15 +41,23 @@ static inline bool	unlock_if_stopped(pthread_mutex_t *fork, t_table *table)
 void	even_num_of_philos(t_philo *philo, t_table *table)
 {
 	pthread_mutex_lock(philo->l_fork);
+	if (print_action(philo, table, "has taken a fork"))
+	{
+		pthread_mutex_unlock(philo->l_fork);
+		return ;
+	}
 	if (unlock_if_stopped(philo->l_fork, table))
 		return ;
-	print_action(philo, table, "has taken a fork");
 	if (philo->r_fork)
 	{
 		pthread_mutex_lock(philo->r_fork);
+		if (print_action(philo, table, "has taken a fork"))
+		{
+			pthread_mutex_unlock(philo->r_fork);
+			return ;
+		}
 		if (unlock_if_stopped(philo->r_fork, table))
 			return ;
-		print_action(philo, table, "has taken a fork");
 	}
 }
 
@@ -61,18 +70,26 @@ void	multiple_philo(t_philo *philo, t_table *table)
 		if (philo->r_fork)
 		{
 			pthread_mutex_lock(philo->r_fork);
+			if (print_action(philo, table, "has taken a fork"))
+			{
+				pthread_mutex_unlock(philo->r_fork);
+				return ;
+			}
 			if (unlock_if_stopped(philo->r_fork, table))
 				return ;
-			print_action(philo, table, "has taken a fork");
 		}
 		pthread_mutex_lock(philo->l_fork);
+		if (print_action(philo, table, "has taken a fork"))
+		{
+			pthread_mutex_unlock(philo->l_fork);
+			return ;
+		}
 		if (unlock_if_stopped(philo->l_fork, table))
 		{
 			if (philo->r_fork)
 				pthread_mutex_unlock(philo->r_fork);
 			return ;
 		}
-		print_action(philo, table, "has taken a fork");
 	}
 }
 

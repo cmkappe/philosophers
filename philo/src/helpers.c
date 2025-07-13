@@ -6,22 +6,25 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:20:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/06/11 17:34:04 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/07/13 20:02:44 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philosophers.h"
 
-void	print_action(t_philo *philo, t_table *table, const char *action)
+bool	print_action(t_philo *philo, t_table *table, const char *action)
 {
 	size_t	now;
-
-	if (get_int_locked(&table->dead_flag, &table->dead_lock) != 0)
-		return ;
+	pthread_mutex_lock(&table->write_lock);
+	if (sim_check(table))
+	{
+		pthread_mutex_unlock(&table->write_lock);
+		return (true);
+	}	
 	now = get_current_time() - table->start_time;
-	pthread_mutex_lock(philo->write_lock);
 	printf("%zu %d %s\n", now, philo->id, action);
-	pthread_mutex_unlock(philo->write_lock);
+	pthread_mutex_unlock(&table->write_lock);
+	return (false);
 }
 
 int	safe_atoi(const char *str)

@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:32:57 by ckappe            #+#    #+#             */
-/*   Updated: 2025/05/31 19:00:02 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/07/13 19:56:35 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ typedef struct s_philo
 	pthread_mutex_t	fork;
 	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	*l_fork;
-	pthread_mutex_t	*write_lock;
-	pthread_mutex_t	*dead_lock;
-	pthread_mutex_t	*meal_lock;
+	// pthread_mutex_t	*write_lock;
+	// pthread_mutex_t	*dead_lock;
+	// pthread_mutex_t	*meal_lock;
 	struct s_table	*table;
 }				t_philo;
 
@@ -46,7 +46,7 @@ typedef struct s_table
 	pthread_mutex_t	dead_lock;
 	pthread_mutex_t	meal_lock;
 	pthread_mutex_t	write_lock;
-	int				dead_flag;
+	bool			dead_flag;
 	int				num_of_philos;
 	size_t			start_time;
 	size_t			time_to_die;
@@ -70,9 +70,8 @@ void	start_sleeping(t_philo *philo, t_table *table);
 void	start_thinking(t_philo *philo, t_table *table);
 void	*philo_routine(void *data);
 
-void	check_for_dead(t_table *table);
 void	check_if_ate(t_table *table);
-void	*monitor_routine(void *data);
+bool	monitor_routine(t_table *table);
 
 int		sim_check(t_table *table);
 
@@ -85,7 +84,7 @@ void	set_size_t_locked(size_t *ptr, pthread_mutex_t *lock, size_t value);
 /* ****************************  HELPERS  ***************************** */
 int		ft_usleep(size_t milliseconds);
 size_t	get_current_time(void);
-void	print_action(t_philo *philo, t_table *table, const char *action);
+bool	print_action(t_philo *philo, t_table *table, const char *action);
 int		safe_atoi(const char *str);
 long	safe_atol(const char *str);
 

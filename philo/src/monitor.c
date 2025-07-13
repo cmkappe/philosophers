@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:17:21 by ckappe            #+#    #+#             */
-/*   Updated: 2025/06/11 17:54:08 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/07/13 20:17:37 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,23 @@
 
 static void	_set_dead(t_table *table)
 {
-	set_int_locked(&table->dead_flag, &table->dead_lock, 1);
+	pthread_mutex_lock(&table->dead_lock);
+	table->dead_flag = true;
+	pthread_mutex_unlock(&table->dead_lock);
 }
 
 int	sim_check(t_table *table)
 {
-	return (get_int_locked(&table->dead_flag, &table->dead_lock));
+	bool	a;
+
+	pthread_mutex_lock(&table->dead_lock);
+	a = table->dead_flag;
+	pthread_mutex_unlock(&table->dead_lock);
+
+	return (a);
 }
 
-void	check_for_dead(t_table *table)
+static bool	check_for_dead(t_table *table)
 {
 	int		i;
 	size_t	cur;
@@ -31,16 +39,17 @@ void	check_for_dead(t_table *table)
 	i = -1;
 	while (++i < table->num_of_philos)
 	{
-		cur = get_current_time() - table->start_time;
 		next_meal = get_size_t_locked(&table->philos[i].time_next_meal,
 				&table->meal_lock);
-		if (cur > next_meal)
+		cur = get_current_time() - table->start_time;
+		if (cur >= next_meal)
 		{
 			print_action(&table->philos[i], table, "died");
 			_set_dead(table);
-			return ;
+			return (true);
 		}
 	}
+	return (false);
 }
 
 void	check_if_ate(t_table *table)
@@ -51,26 +60,21 @@ void	check_if_ate(t_table *table)
 	i = -1;
 	while (++i < table->num_of_philos)
 	{
-		pthread_mutex_lock(table->philos[i].meal_lock);
+		pthread_mutex_lock(&table->meal_lock);
 		meals = table->philos[i].meals_eaten;
-		pthread_mutex_unlock(table->philos[i].meal_lock);
+		pthread_mutex_unlock(&table->meal_lock);
 		if (meals < table->min_meals)
 			return ;
 	}
-	set_int_locked(&table->dead_flag, &table->dead_lock, 1);
+	_set_dead(table);
 }
 
-void	*monitor_routine(void *data)
+bool	monitor_routine(t_table *table)
 {
-	t_table	*table;
-
-	table = (t_table *)data;
-	while (!sim_check(table))
-	{
-		ft_usleep(1);
-		check_for_dead(table);
-		if (table->min_meals > 0)
-			check_if_ate(table);
-	}
-	return (NULL);
+	if (check_for_dead(table))
+		return (false);
+	// if (table->min_meals > 0)
+	// 	check_if_ate(table);
+	ft_usleep(2);
+	return (true);
 }

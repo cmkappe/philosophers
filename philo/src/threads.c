@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:14:14 by ckappe            #+#    #+#             */
-/*   Updated: 2025/07/13 20:14:03 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/07/27 13:08:35 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	create_threads(t_table *table)
 
 	i = -1;
 	table->start_time = get_current_time();
-	printf("starting time %zu", table->start_time);
+	printf("starting time %zu\n", table->start_time);
 	while (++i < table->num_of_philos)
 	{
 		if (pthread_create(&table->philos[i].thread, NULL,
@@ -75,3 +75,54 @@ int	create_threads(t_table *table)
 	// pthread_join(table->monitor, NULL);
 	return (0);
 }
+
+/* int	join_threads(t_table *table)
+{
+	int	i;
+
+	i = 0;
+	while (i < table->num_of_philos)
+	{
+		pthread_join(table->philos[i].thread, NULL);
+		i++;
+	}
+	i = 0;
+	while (i < table->monitor_count)
+	{
+		pthread_join(table->monitors[i], NULL);
+		i++;
+	}
+	return (0);
+} */
+
+
+/* int	start_monitors(t_table *table)
+{
+	int	i;
+
+	i = 0;
+	while (i < table->monitor_count)
+	{
+		if (pthread_create(&table->monitors[i], NULL, monitor_range, &table->monitor_args[i]) != 0)
+			return (-1);
+		i++;
+	}
+	return (0);
+} */
+
+
+/* int	create_threads(t_table *table)
+{
+	int	i;
+
+	i = 0;
+	while (i < table->num_of_philos)
+	{
+		if (pthread_create(&table->philos[i].thread, NULL, philo_routine, &table->philos[i]) != 0)
+			return (-1);
+		i++;
+	}
+	if (start_monitors(table) < 0)
+		return (-1);
+	return (0);
+} */

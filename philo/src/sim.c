@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 16:06:50 by ckappe            #+#    #+#             */
-/*   Updated: 2025/07/13 20:05:56 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/07/27 17:05:37 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	single_philo(t_philo *philo, t_table *table)
 		return ;
 	pthread_mutex_lock(philo->l_fork);
 	while (!sim_check(table))
-		ft_usleep(100);
+		ft_usleep(10);
 	pthread_mutex_unlock(philo->l_fork);
 	return ;
 }
@@ -27,6 +27,7 @@ static inline bool	unlock_if_stopped(pthread_mutex_t *fork, t_table *table)
 {
 	if (sim_check(table))
 	{
+		//ft_usleep(2);
 		pthread_mutex_unlock(fork);
 		return (true);
 	}
@@ -38,11 +39,12 @@ static inline bool	unlock_if_stopped(pthread_mutex_t *fork, t_table *table)
 // Odd-ID Philosophers (P1, P3):
 //		Pick up the right fork first, then the left fork.
 
-void	even_num_of_philos(t_philo *philo, t_table *table)
+/* void	even_num_of_philos(t_philo *philo, t_table *table)
 {
 	pthread_mutex_lock(philo->l_fork);
 	if (print_action(philo, table, "has taken a fork"))
 	{
+		ft_usleep(1);
 		pthread_mutex_unlock(philo->l_fork);
 		return ;
 	}
@@ -53,25 +55,47 @@ void	even_num_of_philos(t_philo *philo, t_table *table)
 		pthread_mutex_lock(philo->r_fork);
 		if (print_action(philo, table, "has taken a fork"))
 		{
+			ft_usleep(1);
 			pthread_mutex_unlock(philo->r_fork);
 			return ;
 		}
 		if (unlock_if_stopped(philo->r_fork, table))
 			return ;
 	}
+} */
+
+void	even_num_of_philos(t_philo *philo, t_table *table)
+{
+	pthread_mutex_lock(philo->l_fork);
+	if (print_action(philo, table, "has taken a fork"))
+	{
+		(unlock_if_stopped(philo->l_fork, table));
+			return ;
+	}
+	if (philo->r_fork)
+	{
+		pthread_mutex_lock(philo->r_fork);
+		if (print_action(philo, table, "has taken a fork"))
+		{
+			unlock_if_stopped(philo->r_fork, table);
+			return ;
+		}
+	}
 }
 
-void	multiple_philo(t_philo *philo, t_table *table)
+/* void	multiple_philo(t_philo *philo, t_table *table)
 {
-	if (philo->id % 2 == 0)
+	if (table->num_of_philos % 2 == 0)
 		even_num_of_philos(philo, table);
 	else
 	{
 		if (philo->r_fork)
 		{
 			pthread_mutex_lock(philo->r_fork);
-			if (print_action(philo, table, "has taken a fork"))
+			//ft_usleep(1);
+			if (print_action(philo, table, "has taken a right fork"))
 			{
+				//ft_usleep(1);
 				pthread_mutex_unlock(philo->r_fork);
 				return ;
 			}
@@ -79,13 +103,43 @@ void	multiple_philo(t_philo *philo, t_table *table)
 				return ;
 		}
 		pthread_mutex_lock(philo->l_fork);
-		if (print_action(philo, table, "has taken a fork"))
+		//ft_usleep(1);
+		if (print_action(philo, table, "has taken a left fork"))
 		{
+			//ft_usleep(1);
 			pthread_mutex_unlock(philo->l_fork);
 			return ;
 		}
 		if (unlock_if_stopped(philo->l_fork, table))
 		{
+			if (philo->r_fork)
+				pthread_mutex_unlock(philo->r_fork);
+			return ;
+		}
+	}
+} */
+
+void	multiple_philo(t_philo *philo, t_table *table)
+{
+	if (table->num_of_philos % 2 == 0)
+		even_num_of_philos(philo, table);
+	else
+	{
+		if (philo->r_fork)
+		{
+			pthread_mutex_lock(philo->r_fork);
+			//ft_usleep(1);
+			if (print_action(philo, table, "has taken a right fork"))
+			{
+				unlock_if_stopped(philo->r_fork, table);
+				return ;
+			}
+		}
+		pthread_mutex_lock(philo->l_fork);
+		//ft_usleep(1);
+		if (print_action(philo, table, "has taken a left fork"))
+		{
+			unlock_if_stopped(philo->l_fork, table);
 			if (philo->r_fork)
 				pthread_mutex_unlock(philo->r_fork);
 			return ;

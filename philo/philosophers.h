@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:32:57 by ckappe            #+#    #+#             */
-/*   Updated: 2025/07/13 19:56:35 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/07/27 16:36:59 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,15 @@
 # include <sys/time.h>
 # include <limits.h>
 
+#define	MAX_MONITORS	8
+
 typedef struct s_philo
 {
 	pthread_t		thread;
 	size_t			last_meal;
 	int				id;
 	int				meals_eaten;
-	int				*dead;
+	//int				*dead;
 	size_t			time_next_meal;
 	pthread_mutex_t	fork;
 	pthread_mutex_t	*r_fork;
@@ -38,6 +40,13 @@ typedef struct s_philo
 	// pthread_mutex_t	*meal_lock;
 	struct s_table	*table;
 }				t_philo;
+
+/* typedef struct s_monitor_args
+{
+	int				start;
+	int				end;
+	t_table			*table;
+}				t_monitor_args; */
 
 typedef struct s_table
 {
@@ -52,8 +61,16 @@ typedef struct s_table
 	size_t			time_to_die;
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
+
+/* 	pthread_t		monitors[MAX_MONITORS];
+	t_monitor_args	monitor_args[MAX_MONITORS];
+	int				monitor_count;
+	int				monitor_range; */
+	
 	int				min_meals;
 }				t_table;
+
+
 
 /* *****************************  INIT  ****************************** */
 int		check_input(int ac, const char **av);
@@ -87,5 +104,8 @@ size_t	get_current_time(void);
 bool	print_action(t_philo *philo, t_table *table, const char *action);
 int		safe_atoi(const char *str);
 long	safe_atol(const char *str);
+
+
+bool	check_for_dead(t_table *table);
 
 #endif

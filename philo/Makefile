@@ -12,7 +12,7 @@ SRC			=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJ			=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 
 CC		=	cc
-CFLAGS	=	-Wall -Wextra -Werror -O2 -g #-fsanitize=thread
+CFLAGS	=	-Wall -Wextra -Werror -Ofast -g #-fsanitize=thread
 
 all: $(NAME)
 

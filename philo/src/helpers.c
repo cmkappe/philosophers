@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:20:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/07/13 20:02:44 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/07/27 13:09:26 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,14 @@
 bool	print_action(t_philo *philo, t_table *table, const char *action)
 {
 	size_t	now;
+
 	pthread_mutex_lock(&table->write_lock);
 	if (sim_check(table))
 	{
+		//ft_usleep(10);
 		pthread_mutex_unlock(&table->write_lock);
 		return (true);
-	}	
+	}
 	now = get_current_time() - table->start_time;
 	printf("%zu %d %s\n", now, philo->id, action);
 	pthread_mutex_unlock(&table->write_lock);

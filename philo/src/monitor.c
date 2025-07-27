@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:17:21 by ckappe            #+#    #+#             */
-/*   Updated: 2025/07/13 20:17:37 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/07/27 17:09:49 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@ static void	_set_dead(t_table *table)
 	pthread_mutex_lock(&table->dead_lock);
 	table->dead_flag = true;
 	pthread_mutex_unlock(&table->dead_lock);
+	pthread_mutex_lock(&table->write_lock);
+	//ft_usleep(5);
+	pthread_mutex_unlock(&table->write_lock);
 }
 
 int	sim_check(t_table *table)
@@ -26,26 +29,23 @@ int	sim_check(t_table *table)
 	pthread_mutex_lock(&table->dead_lock);
 	a = table->dead_flag;
 	pthread_mutex_unlock(&table->dead_lock);
-
 	return (a);
 }
 
-static bool	check_for_dead(t_table *table)
+bool	check_for_dead(t_table *table)
 {
 	int		i;
 	size_t	cur;
-	size_t	next_meal;
 
 	i = -1;
 	while (++i < table->num_of_philos)
 	{
-		next_meal = get_size_t_locked(&table->philos[i].time_next_meal,
-				&table->meal_lock);
 		cur = get_current_time() - table->start_time;
-		if (cur >= next_meal)
+		if (cur > table->philos[i].last_meal + table->time_to_die)
 		{
 			print_action(&table->philos[i], table, "died");
 			_set_dead(table);
+			//ft_usleep(5);
 			return (true);
 		}
 	}
@@ -75,6 +75,6 @@ bool	monitor_routine(t_table *table)
 		return (false);
 	// if (table->min_meals > 0)
 	// 	check_if_ate(table);
-	ft_usleep(2);
+	ft_usleep(8);
 	return (true);
 }

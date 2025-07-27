@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:20:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/07/27 13:09:26 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/07/27 18:00:28 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,8 @@ int	ft_usleep(size_t milliseconds)
 	size_t	start;
 
 	start = get_current_time();
-	while ((get_current_time() - start) < milliseconds)
-		usleep(50);
+	while ((get_current_time() - start) <= milliseconds)
+		usleep(20);
 	return (0);
 }
 

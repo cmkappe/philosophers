@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:17:21 by ckappe            #+#    #+#             */
-/*   Updated: 2025/07/27 17:09:49 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/07/27 17:51:57 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,6 @@ bool	monitor_routine(t_table *table)
 		return (false);
 	// if (table->min_meals > 0)
 	// 	check_if_ate(table);
-	ft_usleep(8);
+	ft_usleep(10);
 	return (true);
 }

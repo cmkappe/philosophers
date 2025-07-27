@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 16:06:50 by ckappe            #+#    #+#             */
-/*   Updated: 2025/07/27 17:05:37 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/07/27 18:12:02 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,20 +67,17 @@ static inline bool	unlock_if_stopped(pthread_mutex_t *fork, t_table *table)
 void	even_num_of_philos(t_philo *philo, t_table *table)
 {
 	pthread_mutex_lock(philo->l_fork);
-	if (print_action(philo, table, "has taken a fork"))
-	{
-		(unlock_if_stopped(philo->l_fork, table));
-			return ;
-	}
-	if (philo->r_fork)
-	{
-		pthread_mutex_lock(philo->r_fork);
-		if (print_action(philo, table, "has taken a fork"))
-		{
-			unlock_if_stopped(philo->r_fork, table);
-			return ;
-		}
-	}
+	print_action(philo, table, "has taken a fork");
+	// {
+	// 	unlock_if_stopped(philo->l_fork, table);
+	// 	return ;
+	// }
+	pthread_mutex_lock(philo->r_fork);
+	print_action(philo, table, "has taken a fork");
+	// {
+	// 	unlock_if_stopped(philo->r_fork, table);
+	// 	return ;
+	// }
 }
 
 /* void	multiple_philo(t_philo *philo, t_table *table)

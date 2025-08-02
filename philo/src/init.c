@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 17:32:34 by ckappe            #+#    #+#             */
-/*   Updated: 2025/07/13 18:37:06 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/08/02 16:56:21 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,27 +76,13 @@ void	init_philo(t_table *table)
 	{
 		table->philos[i].id = i + 1;
 		table->philos[i].meals_eaten = 0;
-		// table->philos[i].last_meal = get_current_time();
 		table->philos[i].time_next_meal = table->time_to_die;
-		// table->philos[i].dead = &table->dead_flag;
-		// table->philos[i].write_lock = &table->write_lock;
-		// table->philos[i].dead_lock = &table->dead_lock;
-		// table->philos[i].meal_lock = &table->meal_lock;
 		table->philos[i].l_fork = &table->philos[i].fork;
 		if (table->num_of_philos == 1)
 			table->philos[i].r_fork = NULL;
 		else
 			table->philos[i].r_fork = &table->philos[(i + 1)
 				% table->num_of_philos].fork;
-		// table->philos[i].thread = 0;
 		table->philos[i].table = table;
 	}
 }
-
-// void	init_table_struct(t_table *table)
-// {
-// 	table->dead_flag = 0;
-// 	pthread_mutex_init(&table->dead_lock, NULL);
-// 	pthread_mutex_init(&table->meal_lock, NULL);
-// 	pthread_mutex_init(&table->write_lock, NULL);
-// }

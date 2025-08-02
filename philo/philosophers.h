@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 13:32:57 by ckappe            #+#    #+#             */
-/*   Updated: 2025/08/02 17:01:50 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/08/02 18:36:39 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int		sim_check(t_table *table);
 bool	check_for_dead(t_table *table);
 
 /* ****************************  HELPERS  ***************************** */
-int		ft_usleep(size_t milliseconds);
+void		ft_usleep(size_t milliseconds);
 size_t	get_current_time(void);
 bool	print_action(t_philo *philo, t_table *table, const char *action);
 int		safe_atoi(const char *str);

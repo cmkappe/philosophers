@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:20:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/08/02 17:00:25 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/08/02 19:49:21 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,29 +30,28 @@ bool	print_action(t_philo *philo, t_table *table, const char *action)
 
 int	safe_atoi(const char *str)
 {
-	int		i;
-	long	result;
+	int				i;
+	int				sign;
+	long long int	result;
 
 	i = 0;
+	sign = 1;
 	result = 0;
-	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\v'
+		|| str[i] == '\r' || str[i] == '\n' || str[i] == '\f')
 		i++;
-	if (str[i] == '-' || str[i] == '\0')
-		return (-1);
-	if (str[i] == '+')
-		i++;
-	while (str[i])
+	if (str[i] == '-' || str[i] == '+')
 	{
-		if (str[i] < '0' || str[i] > '9')
-			return (-1);
-		result = result * 10 + (str[i] - '0');
-		if (result > INT_MAX)
-			return (-1);
+		if (str[i] == '-')
+			sign *= -1;
 		i++;
 	}
-	if (result == 0)
-		return (-1);
-	return ((int)result);
+	while ((str[i] >= '0' && str[i] <= '9') && str[i] != '\0')
+	{
+		result = (result * 10) + (str[i] - '0');
+		i++;
+	}
+	return (result * sign);
 }
 
 long	safe_atol(const char *str)
@@ -84,14 +83,22 @@ long	safe_atol(const char *str)
 	return (res);
 }
 
-int	ft_usleep(size_t milliseconds)
+void	ft_usleep(size_t milliseconds)
 {
 	size_t	start;
+	size_t	elapsed;
 
 	start = get_current_time();
-	while ((get_current_time() - start) <= milliseconds)
-		usleep(20);
-	return (0);
+	while (1)
+	{
+		elapsed = get_current_time() - start;
+		if (elapsed >= milliseconds)
+			break ;
+		if (milliseconds - elapsed > 1)
+			usleep((milliseconds - elapsed) * 500);
+		else
+			usleep(50);
+	}
 }
 
 size_t	get_current_time(void)

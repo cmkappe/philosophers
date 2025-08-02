@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:14:14 by ckappe            #+#    #+#             */
-/*   Updated: 2025/08/02 17:02:45 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/08/02 19:30:20 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	create_threads(t_table *table)
 
 	i = -1;
 	table->start_time = get_current_time();
-	printf("starting time %zu\n", table->start_time);
 	while (++i < table->num_of_philos)
 	{
 		if (pthread_create(&table->philos[i].thread, NULL,
@@ -37,11 +36,6 @@ int	create_threads(t_table *table)
 	}
 	while (monitor_routine(table))
 		;
-	i = -1;
-	while (++i < table->num_of_philos)
-	{
-		pthread_mutex_destroy(&table->philos[i].fork);
-		pthread_join(table->philos[i].thread, NULL);
-	}
+		// ft_usleep(250);
 	return (0);
 }

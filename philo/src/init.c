@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 17:32:34 by ckappe            #+#    #+#             */
-/*   Updated: 2025/08/02 18:27:59 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/08/04 18:02:01 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,7 @@ int	init_table(int ac, const char **av, t_table *table)
 	table->num_of_philos = safe_atoi(av[1]);
 	table->time_to_die = (size_t)safe_atol(av[2]);
 	table->time_to_eat = (size_t)safe_atol(av[3]);
-	printf("time : %zu\n", table->time_to_eat);
 	table->time_to_sleep = (size_t)safe_atol(av[4]);
-	printf("time : %zu\n", table->time_to_sleep);
-	// if (table->num_of_philos < 0 || table->time_to_die < 0
-	// 	|| table->time_to_eat < 0 || table->time_to_sleep < 0)
-	// {
-	// 	write(2, "Error: Invalid arguments.\n", 26);
-	// 	return (-1);
-	// }
 	if (ac == 6)
 		table->min_meals = safe_atoi(av[5]);
 	else
@@ -62,7 +54,7 @@ int	init_table(int ac, const char **av, t_table *table)
 	if (pthread_mutex_init(&table->dead_lock, NULL) != 0
 		|| pthread_mutex_init(&table->meal_lock, NULL) != 0
 		|| pthread_mutex_init(&table->write_lock, NULL) != 0)
-		return (write(2, "Error: mutex init failed.\n", 27), -1);
+		return (write(2, "Error: Mutex init failed.\n", 27), -1);
 	return (0);
 }
 
@@ -88,3 +80,27 @@ void	init_philo(t_table *table)
 		table->philos[i].table = table;
 	}
 }
+
+/* int	init_table(int ac, const char **av, t_table *table)
+{
+	table->num_of_philos = safe_atoi(av[1]);
+	table->time_to_die = (size_t)safe_atol(av[2]);
+	table->time_to_eat = (size_t)safe_atol(av[3]);
+	table->time_to_sleep = (size_t)safe_atol(av[4]);
+	// if (table->num_of_philos < 0 || table->time_to_die < 0
+	// 	|| table->time_to_eat < 0 || table->time_to_sleep < 0)
+	// {
+	// 	write(2, "Error: Invalid arguments.\n", 26);
+	// 	return (-1);
+	// }
+	if (ac == 6)
+		table->min_meals = safe_atoi(av[5]);
+	else
+		table->min_meals = -1;
+	table->dead_flag = 0;
+	if (pthread_mutex_init(&table->dead_lock, NULL) != 0
+		|| pthread_mutex_init(&table->meal_lock, NULL) != 0
+		|| pthread_mutex_init(&table->write_lock, NULL) != 0)
+		return (write(2, "Error: Mutex init failed.\n", 27), -1);
+	return (0);
+} */

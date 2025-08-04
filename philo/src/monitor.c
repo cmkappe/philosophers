@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:17:21 by ckappe            #+#    #+#             */
-/*   Updated: 2025/08/02 19:19:00 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/08/04 17:46:46 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,14 @@ bool	check_for_dead(t_table *table)
 {
 	int		i;
 	size_t	cur;
+	size_t	last_meal;
 
 	i = -1;
 	while (++i < table->num_of_philos)
 	{
 		cur = get_current_time() - table->start_time;
-		if (cur > (get_size_t_locked(&table->philos[i].last_meal, &table->write_lock) + table->time_to_die))
+		last_meal = get_locked(&table->philos[i].last_meal, &table->meal_lock);
+		if (cur > (last_meal + table->time_to_die))
 		{
 			print_action(&table->philos[i], table, "died");
 			_set_dead(table);
@@ -75,6 +77,5 @@ bool	monitor_routine(t_table *table)
 	if (table->min_meals > 0)
 		check_if_ate(table);
 	ft_usleep(1);
-
 	return (true);
 }

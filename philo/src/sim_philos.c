@@ -6,21 +6,19 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 16:06:50 by ckappe            #+#    #+#             */
-/*   Updated: 2025/08/02 19:54:04 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/08/04 15:43:45 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philosophers.h"
 
-// static inline bool	unlock_if_stopped(pthread_mutex_t *fork, t_table *table)
-// {
-// 	if (sim_check(table))
-// 	{
-// 		pthread_mutex_unlock(fork);
-// 		return (true);
-// 	}
-// 	return (false);
-// }
+static void	unlock_if_stopped(pthread_mutex_t	*first_fork,
+	pthread_mutex_t	*second_fork)
+{
+	pthread_mutex_unlock(first_fork);
+	pthread_mutex_unlock(second_fork);
+	return ;
+}
 
 void	single_philo(t_philo *philo, t_table *table)
 {
@@ -38,33 +36,10 @@ void	single_philo(t_philo *philo, t_table *table)
 // Odd-ID Philosophers (P1, P3):
 //		Pick up the right fork first, then the left fork.
 
-// void	even_num_of_philos(t_philo *philo, t_table *table)
-// {
-// 	pthread_mutex_lock(philo->l_fork);
-// 	print_action(philo, table, "has taken a fork");
-// 	pthread_mutex_lock(philo->r_fork);
-// 	print_action(philo, table, "has taken a fork");
-// }
-
-/* void	even_num_of_philos(t_philo *philo, t_table *table)
-{
-	pthread_mutex_lock(philo->l_fork);
-	print_action(philo, table, "has taken a fork");
-	{
-		unlock_if_stopped(philo->l_fork, table);
-		return ;
-	}
-	pthread_mutex_lock(philo->r_fork);
-	print_action(philo, table, "has taken a fork");
-	{
-		unlock_if_stopped(philo->r_fork, table);
-		return ;
-	}
-} */
-
 void	multiple_philo(t_philo *philo, t_table *table)
 {
-	pthread_mutex_t	*first_fork, *second_fork;
+	pthread_mutex_t	*first_fork;
+	pthread_mutex_t	*second_fork;
 
 	if (philo->id % 2 == 0)
 	{
@@ -86,11 +61,7 @@ void	multiple_philo(t_philo *philo, t_table *table)
 	pthread_mutex_lock(second_fork);
 	print_action(philo, table, "has taken a fork");
 	if (sim_check(table))
-	{
-		pthread_mutex_unlock(first_fork);
-		pthread_mutex_unlock(second_fork);
-		return ;
-	}
+		unlock_if_stopped(first_fork, second_fork);
 }
 
 void	*philo_routine(void *data)
